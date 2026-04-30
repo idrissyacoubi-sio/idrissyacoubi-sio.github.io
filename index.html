@@ -112,6 +112,7 @@
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
+            position: relative;
         }
         .card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.12); }
 
@@ -207,6 +208,30 @@
         :root[data-theme="light"] .text-slate-400 { color: var(--text-muted) !important; }
         :root[data-theme="light"] .text-slate-500 { color: var(--text-faint) !important; }
 
+        /* STYLE POUR LE BOUTON SUPPRIMER (CROIX) */
+        .btn-delete-proc {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-faint);
+            background: transparent;
+            border: none;
+            line-height: 1;
+        }
+        .btn-delete-proc:hover {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
         @media (max-width: 640px) {
             .xp-card { grid-template-columns: 1fr; }
             .xp-icon-wrap { width: 48px; height: 48px; font-size: 20px; }
@@ -235,7 +260,6 @@
 
     <main class="max-w-5xl mx-auto px-6 py-12 space-y-32">
 
-        <!-- ── 01. OBJECTIF ── -->
         <section id="objectif" class="pt-10 scroll-mt-24">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
@@ -260,14 +284,12 @@
             </div>
         </section>
 
-        <!-- ── 02. PARCOURS PROFESSIONNEL ── -->
         <section id="parcours" class="space-y-10 scroll-mt-24">
             <div>
                 <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 02. Parcours Professionnel</h2>
                 <p class="mt-4 text-sm" style="color:var(--text-faint)">Deux stages effectués chez <strong style="color:var(--text-muted)">Howmet SAS</strong> durant ma formation BTS SIO SISR.</p>
             </div>
 
-            <!-- Bloc 1 -->
             <div class="xp-card">
                 <div class="xp-icon-wrap grad-purple">🖥️</div>
                 <div>
@@ -290,7 +312,6 @@
                 </div>
             </div>
 
-            <!-- Bloc 2 -->
             <div class="xp-card">
                 <div class="xp-icon-wrap grad-blue">🛠️</div>
                 <div>
@@ -314,7 +335,6 @@
             </div>
         </section>
 
-        <!-- ── 03. COMPÉTENCES ── -->
         <section id="competences" class="space-y-8 scroll-mt-24">
             <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 03. Compétences Techniques</h2>
             <div class="grid md:grid-cols-3 gap-6">
@@ -336,7 +356,6 @@
             </div>
         </section>
 
-        <!-- ── 04. PROCÉDURES ── -->
         <section id="procedures" class="space-y-8 scroll-mt-24">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Procédures &amp; Travaux Pratiques</h2>
@@ -347,19 +366,14 @@
                 </button>
             </div>
 
-            <!-- Grille des procédures -->
             <div id="proc-grid" class="grid md:grid-cols-2 gap-8"></div>
 
-            <!-- Message si vide -->
             <div id="proc-empty" class="card p-10 rounded-xl text-center hidden">
                 <div class="text-4xl mb-3">📂</div>
                 <p class="text-sm" style="color:var(--text-faint)">Aucune procédure pour l'instant.<br>Cliquez sur <strong style="color:#10b981">Ajouter une procédure</strong> pour commencer.</p>
             </div>
         </section>
 
-        <!-- ══════════════════════════════════════════
-             MODAL D'UPLOAD
-             ══════════════════════════════════════════ -->
         <div id="uploadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px)">
             <div class="w-full max-w-lg rounded-2xl p-8 space-y-6" style="background:var(--bg-card);border:1px solid var(--border-color);backdrop-filter:blur(20px)">
                 <div class="flex justify-between items-center">
@@ -367,7 +381,6 @@
                     <button onclick="closeModal()" class="text-xl" style="color:var(--text-faint)">&times;</button>
                 </div>
 
-                <!-- Titre -->
                 <div>
                     <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Titre *</label>
                     <input id="inp-title" type="text" placeholder="Ex: Architecture 3-Tiers sous Linux"
@@ -375,7 +388,6 @@
                            style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)">
                 </div>
 
-                <!-- Description -->
                 <div>
                     <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Description</label>
                     <textarea id="inp-desc" rows="2" placeholder="Courte description de la procédure..."
@@ -383,7 +395,6 @@
                               style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)"></textarea>
                 </div>
 
-                <!-- Fichier PDF -->
                 <div>
                     <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Fichier PDF *</label>
                     <label id="drop-zone" for="inp-file"
@@ -399,7 +410,6 @@
                     <input id="inp-file" type="file" accept=".pdf" class="hidden" onchange="handleFileSelect(this)">
                 </div>
 
-                <!-- Couleur de la carte -->
                 <div>
                     <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Couleur d'accent</label>
                     <div class="flex gap-3">
@@ -414,10 +424,8 @@
                     </div>
                 </div>
 
-                <!-- Erreur -->
                 <p id="upload-error" class="text-xs hidden" style="color:#f87171"></p>
 
-                <!-- Boutons -->
                 <div class="flex gap-3 justify-end pt-2">
                     <button onclick="closeModal()" class="px-5 py-2 rounded-lg text-xs mono transition-all"
                             style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">Annuler</button>
@@ -427,7 +435,6 @@
             </div>
         </div>
 
-        <!-- ── 05. VEILLE ── -->
         <section id="veille" class="space-y-8 scroll-mt-24">
             <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 05. Veille Technologique</h2>
             <div class="veille-card p-8">
@@ -451,7 +458,6 @@
             </div>
         </section>
 
-        <!-- ── 06. E6 ── -->
         <section id="e6" class="space-y-8 scroll-mt-24">
             <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 06. Parcours de Professionnalisation (E6)</h2>
             <div class="e6-card p-8 rounded-xl flex flex-col md:flex-row justify-between items-center gap-6">
@@ -605,7 +611,7 @@
                 const borderStyle = `border-left:4px solid ${c.border}`;
 
                 if (p.static) {
-                    // Static card
+                    // Static card (No delete button for safety)
                     const btnHtml = p.href
                         ? `<a href="${p.href}" target="_blank" class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">VOIR LA PROCÉDURE</a>`
                         : `<span class="mono text-xs font-bold uppercase tracking-widest" style="color:${c.label}">Doc technique en ligne</span>`;
@@ -618,24 +624,26 @@
                         ${btnHtml}
                     </div>`;
                 } else {
-                    // Uploaded card
+                    // Uploaded card (With Delete Cross)
                     return `
                     <div class="card p-8 rounded-xl" style="${borderStyle}">
+                        <button onclick="deleteProcedure('${p.id}')" class="btn-delete-proc" title="Supprimer la procédure">×</button>
                         <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
-                            <button onclick="deleteProcedure('${p.id}')" title="Supprimer" class="text-sm ml-2 opacity-40 hover:opacity-100 transition-opacity" style="color:var(--text-faint)">🗑</button>
+                            <h3 class="text-xl font-bold pr-8" style="color:var(--text-main)">${p.title}</h3>
                         </div>
                         <p class="text-xs mono mb-1" style="color:var(--text-faint)">📅 Ajouté le ${p.createdAt} · 📄 ${p.fileName}</p>
                         ${p.desc ? `<p class="text-sm mt-2 mb-6" style="color:var(--text-muted)">${p.desc}</p>` : '<div class="mb-6"></div>'}
-                        <a href="${p.fileB64}" download="${p.fileName}"
-                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all mr-2" style="${btnStyle}">
-                            TÉLÉCHARGER
-                        </a>
-                        <a href="${p.fileB64}" target="_blank"
-                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all"
-                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">
-                            VOIR
-                        </a>
+                        <div class="flex gap-2">
+                            <a href="${p.fileB64}" download="${p.fileName}"
+                               class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">
+                                TÉLÉCHARGER
+                            </a>
+                            <a href="${p.fileB64}" target="_blank"
+                               class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all"
+                               style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">
+                                VOIR
+                            </a>
+                        </div>
                     </div>`;
                 }
             }).join('');
