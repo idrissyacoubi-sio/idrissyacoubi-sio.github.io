@@ -317,8 +317,8 @@
                             </div>
                             <div>
                                 <p class="text-xs mono font-semibold text-blue-500">2023 – 2024</p>
-                                <p class="font-bold text-sm" style="color:var(--text-main)">Année préparatoire / Mise à niveau</p>
-                                <p class="text-xs" style="color:var(--text-faint)">Préparation à l'entrée en BTS SIO</p>
+                                <p class="font-bold text-sm" style="color:var(--text-main)">Licence Éco-Gestion (L1)</p>
+                                <p class="text-xs" style="color:var(--text-faint)">1ère année de Licence Économie-Gestion à l'université</p>
                             </div>
                         </div>
                         <!-- Étape 3 -->
@@ -416,21 +416,98 @@
         <!-- ── 04. COMPÉTENCES ── -->
         <section id="competences" class="space-y-8 scroll-mt-24">
             <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Compétences Techniques</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="card p-6 rounded-xl text-center">
-                    <div class="text-3xl mb-2">🖥️</div>
-                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Systèmes</h4>
-                    <p class="text-xs" style="color:var(--text-faint)">Windows Server, Active Directory, Linux Debian</p>
+
+            <div class="grid md:grid-cols-2 gap-4 mt-6">
+
+                <!-- Gestion de switch -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">🔀</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Gestion de switch</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">6 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Configuration des VLANs (création, assignation de ports)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Trunk 802.1Q &amp; encapsulation inter-VLAN</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Spanning Tree Protocol (STP / RSTP)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Port Security &amp; filtrage MAC</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>EtherChannel / agrégation de liens</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Sauvegarde &amp; restauration de configuration IOS</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="card p-6 rounded-xl text-center">
-                    <div class="text-3xl mb-2">⚙️</div>
-                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Automation</h4>
-                    <p class="text-xs" style="color:var(--text-faint)">Scripts PowerShell (75%), Gestion AD</p>
+
+                <!-- Gestion de routeur -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">🌐</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Gestion de routeur</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">5 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Routage statique &amp; routes par défaut</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Routage dynamique OSPF (single-area &amp; multi-area)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>NAT / PAT (translation d'adresses)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>ACL standard &amp; étendue (filtrage de trafic)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Configuration DHCP Relay &amp; inter-VLAN routing</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="card p-6 rounded-xl text-center">
-                    <div class="text-3xl mb-2">🛡️</div>
-                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Sécurité</h4>
-                    <p class="text-xs" style="color:var(--text-faint)">Hardening ANSSI, Architecture 3-Tiers</p>
+
+                <!-- Administration et configuration système -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(139,92,246,0.15)">🖥️</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Administration et configuration système</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Windows Server : Active Directory / GPO / DHCP / DNS / DDNS / Unités Organisationnelles / Partages</li>
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Linux : DNS / DHCP / LDAP / HAProxy / Samba / FTP / PostFix / Squid</li>
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Virtualisation : VMware / Hyper-V / VirtualBox / Proxmox</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cybersécurité -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(16,185,129,0.15)">🛡️</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Cybersécurité</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Hardening ANSSI : durcissement SSH, pare-feu, gestion des droits</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Architecture sécurisée 3-Tiers (DMZ, segmentation réseau)</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Analyse de vulnérabilités &amp; veille CVE</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Compétences fondamentales (pleine largeur) -->
+            <div class="card rounded-xl overflow-hidden">
+                <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">⚙️</div>
+                    <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Compétences fondamentales</span>
+                    <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                    <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                </button>
+                <div class="skill-content hidden px-5 pb-5 pt-0">
+                    <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Scripts PowerShell : automatisation, énumération réseau, gestion Active Directory</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Support utilisateur : diagnostic, résolution d'incidents, prise en main à distance</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Gestion de projet : planification, coordination, reporting hebdomadaire</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -637,6 +714,22 @@
             html.setAttribute('data-theme', isDark ? 'light' : 'dark');
             document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
             document.getElementById('themeLabel').textContent = isDark ? 'Sombre' : 'Clair';
+        }
+
+        /* ── SKILLS ACCORDION ── */
+        function toggleSkill(btn) {
+            const content = btn.nextElementSibling;
+            const chevron = btn.querySelector('.skill-chevron');
+            const isOpen = !content.classList.contains('hidden');
+            if (isOpen) {
+                content.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+                btn.closest('.card').style.borderColor = 'var(--border-color)';
+            } else {
+                content.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+                btn.closest('.card').style.borderColor = '#8b5cf6';
+            }
         }
 
         /* ── COULEURS ── */
