@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Idriss Yacoubi | Portfolio BTS SIO</title>
+    <script>
+        // Suppress Tailwind CDN production warning
+        if (typeof window !== 'undefined') {
+            const _warn = console.warn.bind(console);
+            console.warn = (...args) => {
+                if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+                _warn(...args);
+            };
+        }
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
@@ -328,23 +338,94 @@
 
         <!-- ── 04. PROCÉDURES ── -->
         <section id="procedures" class="space-y-8 scroll-mt-24">
-            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Procédures &amp; Travaux Pratiques</h2>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="card p-8 rounded-xl hover:border-emerald-500">
-                    <h3 class="text-xl font-bold mb-4" style="color:var(--text-main)">Architecture 3-Tiers sous Linux</h3>
-                    <p class="text-sm mb-6" style="color:var(--text-muted)">Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.</p>
-                    <a href="Procedure_3Tiers_Idriss_Yacoubi_V2.pdf" target="_blank"
-                       class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg text-xs transition-colors">
-                        VOIR LA PROCÉDURE
-                    </a>
-                </div>
-                <div class="card p-8 rounded-xl hover:border-blue-500">
-                    <h3 class="text-xl font-bold mb-4" style="color:var(--text-main)">Scripting PowerShell</h3>
-                    <p class="text-sm mb-6" style="color:var(--text-muted)">Automatisation du staging de postes et outil de listing RDP "1-clic".</p>
-                    <span class="text-blue-500 mono text-[10px] uppercase tracking-widest font-bold">Doc technique en ligne</span>
-                </div>
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Procédures &amp; Travaux Pratiques</h2>
+                <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
+                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold mono transition-all"
+                        style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.4);color:#10b981">
+                    <span>＋</span> Ajouter une procédure
+                </button>
+            </div>
+
+            <!-- Grille des procédures -->
+            <div id="proc-grid" class="grid md:grid-cols-2 gap-8"></div>
+
+            <!-- Message si vide -->
+            <div id="proc-empty" class="card p-10 rounded-xl text-center hidden">
+                <div class="text-4xl mb-3">📂</div>
+                <p class="text-sm" style="color:var(--text-faint)">Aucune procédure pour l'instant.<br>Cliquez sur <strong style="color:#10b981">Ajouter une procédure</strong> pour commencer.</p>
             </div>
         </section>
+
+        <!-- ══════════════════════════════════════════
+             MODAL D'UPLOAD
+             ══════════════════════════════════════════ -->
+        <div id="uploadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px)">
+            <div class="w-full max-w-lg rounded-2xl p-8 space-y-6" style="background:var(--bg-card);border:1px solid var(--border-color);backdrop-filter:blur(20px)">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold mono" style="color:var(--text-main)">Nouvelle procédure</h3>
+                    <button onclick="closeModal()" class="text-xl" style="color:var(--text-faint)">&times;</button>
+                </div>
+
+                <!-- Titre -->
+                <div>
+                    <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Titre *</label>
+                    <input id="inp-title" type="text" placeholder="Ex: Architecture 3-Tiers sous Linux"
+                           class="w-full rounded-lg px-4 py-2 text-sm outline-none"
+                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Description</label>
+                    <textarea id="inp-desc" rows="2" placeholder="Courte description de la procédure..."
+                              class="w-full rounded-lg px-4 py-2 text-sm outline-none resize-none"
+                              style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)"></textarea>
+                </div>
+
+                <!-- Fichier PDF -->
+                <div>
+                    <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Fichier PDF *</label>
+                    <label id="drop-zone" for="inp-file"
+                           class="flex flex-col items-center justify-center gap-2 rounded-xl p-8 cursor-pointer transition-all"
+                           style="border:2px dashed var(--border-color);color:var(--text-faint)"
+                           ondragover="event.preventDefault();this.style.borderColor='#10b981'"
+                           ondragleave="this.style.borderColor='var(--border-color)'"
+                           ondrop="handleDrop(event)">
+                        <span class="text-3xl">📄</span>
+                        <span class="text-xs mono">Glisser-déposer ou <span style="color:#10b981">parcourir</span></span>
+                        <span id="file-name" class="text-xs" style="color:var(--text-faint)">Aucun fichier sélectionné</span>
+                    </label>
+                    <input id="inp-file" type="file" accept=".pdf" class="hidden" onchange="handleFileSelect(this)">
+                </div>
+
+                <!-- Couleur de la carte -->
+                <div>
+                    <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Couleur d'accent</label>
+                    <div class="flex gap-3">
+                        <label class="cursor-pointer"><input type="radio" name="color" value="emerald" class="hidden" checked>
+                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#10b981;border-color:transparent" onclick="selectColor(this,'emerald')"></span></label>
+                        <label class="cursor-pointer"><input type="radio" name="color" value="blue" class="hidden">
+                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#3b82f6;border-color:transparent" onclick="selectColor(this,'blue')"></span></label>
+                        <label class="cursor-pointer"><input type="radio" name="color" value="purple" class="hidden">
+                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#8b5cf6;border-color:transparent" onclick="selectColor(this,'purple')"></span></label>
+                        <label class="cursor-pointer"><input type="radio" name="color" value="rose" class="hidden">
+                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#f43f5e;border-color:transparent" onclick="selectColor(this,'rose')"></span></label>
+                    </div>
+                </div>
+
+                <!-- Erreur -->
+                <p id="upload-error" class="text-xs hidden" style="color:#f87171"></p>
+
+                <!-- Boutons -->
+                <div class="flex gap-3 justify-end pt-2">
+                    <button onclick="closeModal()" class="px-5 py-2 rounded-lg text-xs mono transition-all"
+                            style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">Annuler</button>
+                    <button onclick="saveProcedure()" class="px-5 py-2 rounded-lg text-xs mono font-bold transition-all"
+                            style="background:#10b981;color:#fff">Enregistrer</button>
+                </div>
+            </div>
+        </div>
 
         <!-- ── 05. VEILLE ── -->
         <section id="veille" class="space-y-8 scroll-mt-24">
@@ -395,12 +476,169 @@
     </footer>
 
     <script>
+        /* ── THEME ── */
         function toggleTheme() {
             const html = document.documentElement;
             const isDark = html.getAttribute('data-theme') === 'dark';
             html.setAttribute('data-theme', isDark ? 'light' : 'dark');
             document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
             document.getElementById('themeLabel').textContent = isDark ? 'Sombre' : 'Clair';
+        }
+
+        /* ── COULEURS ── */
+        const COLORS = {
+            emerald: { border:'#10b981', btn:'background:#10b981;color:#fff', hover:'hover:border-emerald-500', label:'#10b981' },
+            blue:    { border:'#3b82f6', btn:'background:#3b82f6;color:#fff', hover:'hover:border-blue-500',    label:'#3b82f6' },
+            purple:  { border:'#8b5cf6', btn:'background:#8b5cf6;color:#fff', hover:'hover:border-purple-500',  label:'#8b5cf6' },
+            rose:    { border:'#f43f5e', btn:'background:#f43f5e;color:#fff', hover:'hover:border-rose-500',    label:'#f43f5e' },
+        };
+        let selectedColor = 'emerald';
+        let selectedFileB64 = null;
+        let selectedFileName = '';
+
+        function selectColor(el, color) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.style.borderColor = 'transparent');
+            el.style.borderColor = '#f1f5f9';
+            selectedColor = color;
+        }
+        // init first swatch selected
+        window.addEventListener('DOMContentLoaded', () => {
+            const first = document.querySelector('.color-swatch');
+            if (first) first.style.borderColor = '#f1f5f9';
+            renderAll();
+        });
+
+        /* ── FILE HANDLING ── */
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) readFile(file);
+        }
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('drop-zone').style.borderColor = 'var(--border-color)';
+            const file = e.dataTransfer.files[0];
+            if (file && file.type === 'application/pdf') readFile(file);
+            else showError('Veuillez déposer un fichier PDF.');
+        }
+        function readFile(file) {
+            selectedFileName = file.name;
+            document.getElementById('file-name').textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = e => { selectedFileB64 = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+
+        /* ── MODAL ── */
+        function closeModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('inp-title').value = '';
+            document.getElementById('inp-desc').value = '';
+            document.getElementById('inp-file').value = '';
+            document.getElementById('file-name').textContent = 'Aucun fichier sélectionné';
+            document.getElementById('upload-error').classList.add('hidden');
+            selectedFileB64 = null;
+            selectedFileName = '';
+        }
+        function showError(msg) {
+            const el = document.getElementById('upload-error');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        /* ── SAVE ── */
+        function saveProcedure() {
+            const title = document.getElementById('inp-title').value.trim();
+            const desc  = document.getElementById('inp-desc').value.trim();
+            if (!title)          return showError('Le titre est obligatoire.');
+            if (!selectedFileB64) return showError('Veuillez sélectionner un fichier PDF.');
+
+            const id = 'proc_' + Date.now();
+            const proc = { id, title, desc, color: selectedColor, fileName: selectedFileName, fileB64: selectedFileB64, createdAt: new Date().toLocaleDateString('fr-FR') };
+
+            // Save to localStorage
+            const all = getAll();
+            all.push(proc);
+            localStorage.setItem('portfolio_procedures', JSON.stringify(all));
+
+            closeModal();
+            renderAll();
+        }
+
+        /* ── DELETE ── */
+        function deleteProcedure(id) {
+            if (!confirm('Supprimer cette procédure ?')) return;
+            const all = getAll().filter(p => p.id !== id);
+            localStorage.setItem('portfolio_procedures', JSON.stringify(all));
+            renderAll();
+        }
+
+        /* ── STORAGE ── */
+        function getAll() {
+            try { return JSON.parse(localStorage.getItem('portfolio_procedures') || '[]'); }
+            catch { return []; }
+        }
+
+        /* ── RENDER ── */
+        function renderAll() {
+            const grid  = document.getElementById('proc-grid');
+            const empty = document.getElementById('proc-empty');
+            const all   = getAll();
+
+            // Built-in static cards
+            const statics = [
+                { id: 'static-1', title: 'Architecture 3-Tiers sous Linux', desc: 'Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.', color: 'emerald', href: 'Procedure_3Tiers_Idriss_Yacoubi_V2.pdf', static: true },
+                { id: 'static-2', title: 'Scripting PowerShell', desc: 'Automatisation du staging de postes et outil de listing RDP "1-clic".', color: 'blue', href: null, static: true },
+            ];
+
+            const combined = [...statics, ...all];
+
+            if (combined.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            grid.innerHTML = combined.map(p => {
+                const c = COLORS[p.color] || COLORS.emerald;
+                const btnStyle = c.btn;
+                const borderStyle = `border-left:4px solid ${c.border}`;
+
+                if (p.static) {
+                    // Static card
+                    const btnHtml = p.href
+                        ? `<a href="${p.href}" target="_blank" class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">VOIR LA PROCÉDURE</a>`
+                        : `<span class="mono text-xs font-bold uppercase tracking-widest" style="color:${c.label}">Doc technique en ligne</span>`;
+                    return `
+                    <div class="card p-8 rounded-xl" style="${borderStyle}">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
+                        </div>
+                        <p class="text-sm mb-6" style="color:var(--text-muted)">${p.desc}</p>
+                        ${btnHtml}
+                    </div>`;
+                } else {
+                    // Uploaded card
+                    return `
+                    <div class="card p-8 rounded-xl" style="${borderStyle}">
+                        <div class="flex justify-between items-start mb-1">
+                            <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
+                            <button onclick="deleteProcedure('${p.id}')" title="Supprimer" class="text-sm ml-2 opacity-40 hover:opacity-100 transition-opacity" style="color:var(--text-faint)">🗑</button>
+                        </div>
+                        <p class="text-xs mono mb-1" style="color:var(--text-faint)">📅 Ajouté le ${p.createdAt} · 📄 ${p.fileName}</p>
+                        ${p.desc ? `<p class="text-sm mt-2 mb-6" style="color:var(--text-muted)">${p.desc}</p>` : '<div class="mb-6"></div>'}
+                        <a href="${p.fileB64}" download="${p.fileName}"
+                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all mr-2" style="${btnStyle}">
+                            TÉLÉCHARGER
+                        </a>
+                        <a href="${p.fileB64}" target="_blank"
+                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all"
+                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">
+                            VOIR
+                        </a>
+                    </div>`;
+                }
+            }).join('');
         }
     </script>
 </body>
