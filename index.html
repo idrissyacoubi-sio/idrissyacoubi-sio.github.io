@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idriss Yacoubi | Portfolio BTS SIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── DARK THEME (défaut) ── */
+        :root[data-theme="dark"] {
+            --bg-main:          #0f172a;
+            --bg-nav:           rgba(15, 23, 42, 0.95);
+            --bg-card:          rgba(30, 41, 59, 0.75);
+            --bg-footer:        rgba(15, 23, 42, 0.85);
+            --bg-tag:           #1e293b;
+            --bg-veille-block:  rgba(15, 23, 42, 0.5);
+            --bg-veille-inner:  rgba(30, 41, 59, 0.6);
+            --bg-e6-card:       linear-gradient(135deg, #1e293b, #0f172a);
+            --text-main:        #f1f5f9;
+            --text-muted:       #94a3b8;
+            --text-faint:       #64748b;
+            --text-footer:      #64748b;
+            --border-color:     rgba(255,255,255,0.1);
+            --border-nav:       #1e293b;
+            --border-tag:       #334155;
+            --badge-bg:         #1e293b;
+            --badge-border:     #334155;
+            --icon-ring:        rgba(255,255,255,0.08);
+        }
+
+        /* ── LIGHT THEME ── */
+        :root[data-theme="light"] {
+            --bg-main:          #f1f5f9;
+            --bg-nav:           rgba(255,255,255,0.97);
+            --bg-card:          rgba(255,255,255,0.92);
+            --bg-footer:        #e2e8f0;
+            --bg-tag:           #dde3ec;
+            --bg-veille-block:  rgba(255,255,255,0.9);
+            --bg-veille-inner:  rgba(226,232,240,0.8);
+            --bg-e6-card:       linear-gradient(135deg, #dbeafe, #e0f2fe);
+            --text-main:        #0f172a;
+            --text-muted:       #374151;
+            --text-faint:       #6b7280;
+            --text-footer:      #6b7280;
+            --border-color:     rgba(0,0,0,0.1);
+            --border-nav:       #e2e8f0;
+            --border-tag:       #b6c3d1;
+            --badge-bg:         #dde3ec;
+            --badge-border:     #b6c3d1;
+            --icon-ring:        rgba(0,0,0,0.07);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        /* ── NAV & FOOTER ── */
+        nav    { background: var(--bg-nav);    border-bottom: 1px solid var(--border-nav) !important; }
+        footer { background: var(--bg-footer); border-top:    1px solid var(--border-nav) !important; }
+
+        /* ── THEME BUTTON ── */
+        .theme-btn {
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--text-muted);
+            border-radius: 9999px;
+            padding: 6px 14px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .theme-btn:hover { border-color: #10b981; color: #10b981; }
+
+        /* ── NAV LINKS ── */
+        .nav-link { transition: all 0.2s; position: relative; color: var(--text-muted); }
+        .nav-link:hover { color: #10b981; }
+
+        /* ── SECTION TITLE ── */
+        .section-title { position: relative; display: inline-block; }
+        .section-title::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 0;
+            width: 40px; height: 2px;
+            background: #10b981;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        .card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.12); }
+
+        /* ── VEILLE ── */
+        .veille-card {
+            background: var(--bg-veille-block);
+            border-left: 4px solid #3b82f6;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .veille-inner {
+            background: var(--bg-veille-inner);
+            border: 1px solid var(--border-tag);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .veille-tag {
+            font-size: 10px;
+            background: var(--bg-tag);
+            color: var(--text-muted);
+            border: 1px solid var(--border-tag);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* ── E6 CARD ── */
+        .e6-card {
+            background: var(--bg-e6-card);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ── XP CARDS (Parcours) ── */
+        .xp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 32px;
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 24px;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .xp-card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.10); }
+
+        .xp-icon-wrap {
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 0 6px var(--icon-ring);
+            flex-shrink: 0;
+        }
+        .xp-icon-wrap.grad-purple { background: linear-gradient(135deg, #7c3aed, #db2777); }
+        .xp-icon-wrap.grad-blue   { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+
+        .xp-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            border-radius: 9999px;
+            padding: 3px 10px;
+            font-size: 10px;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        /* dark accents */
+        :root[data-theme="dark"] .badge.accent { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #34d399; }
+        :root[data-theme="dark"] .badge.blue   { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.4); color: #93c5fd; }
+        /* light accents — darker for contrast */
+        :root[data-theme="light"] .badge.accent { background: rgba(16,185,129,0.1); border-color: rgba(5,150,105,0.5); color: #047857; }
+        :root[data-theme="light"] .badge.blue   { background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.4); color: #1d4ed8; }
+
+        .xp-tasks { list-style: none; padding: 0; margin: 0; }
+        .xp-tasks li {
+            display: flex; align-items: flex-start; gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.6;
+        }
+        .xp-tasks li:last-child { border-bottom: none; }
+        .xp-tasks li .check { flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+        .xp-tasks li strong { color: var(--text-main); font-weight: 600; }
+
+        /* ── light-mode: fix hardcoded Tailwind slate colors ── */
+        :root[data-theme="light"] .text-slate-400 { color: var(--text-muted) !important; }
+        :root[data-theme="light"] .text-slate-500 { color: var(--text-faint) !important; }
+
+        @media (max-width: 640px) {
+            .xp-card { grid-template-columns: 1fr; }
+            .xp-icon-wrap { width: 48px; height: 48px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body class="leading-relaxed">
+
+    <nav class="sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <span class="mono text-emerald-400 font-bold tracking-tighter text-xl">IDRISS_YACOUBI_</span>
+            <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest font-medium items-center">
+                <a href="#objectif"    class="nav-link">Objectif</a>
+                <a href="#parcours"    class="nav-link text-emerald-400">Parcours</a>
+                <a href="#competences" class="nav-link">Compétences</a>
+                <a href="#procedures"  class="nav-link">Procédures</a>
+                <a href="#veille"      class="nav-link">Veille</a>
+                <a href="#e6"          class="nav-link">Épreuve E6</a>
+                <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+                    <span id="themeIcon">☀️</span>
+                    <span id="themeLabel">Clair</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-32">
+
+        <!-- ── 01. OBJECTIF ── -->
+        <section id="objectif" class="pt-10 scroll-mt-24">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase">// 01. Profil &amp; Objectif</h2>
+                    <h1 class="text-5xl font-bold leading-tight">Futur Analyste <span class="text-blue-500">SOC</span> &amp; Expert Linux.</h1>
+                    <p class="text-lg" style="color:var(--text-muted)">
+                        Étudiant en 2ème année de BTS SIO (SISR) à CaenSup Sainte-Ursule. Passionné par la cybersécurité, j'ai piloté la migration de <strong>180+ postes</strong> chez Howmet SAS.
+                    </p>
+                    <div class="flex gap-4">
+                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/50 text-emerald-500 text-xs rounded font-semibold">SISR</span>
+                        <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-500 text-xs rounded font-semibold">Cybersecurity</span>
+                    </div>
+                </div>
+                <div class="card p-8 rounded-xl border-l-4 border-emerald-500">
+                    <h3 class="mono text-emerald-400 mb-4 font-bold">Plan_de_Carrière :</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Bachelor Cybersécurité (2026)</li>
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Analyste SOC N1 / Réponse aux incidents</li>
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Expertise Hardening &amp; Systèmes Industriels</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 02. PARCOURS PROFESSIONNEL ── -->
+        <section id="parcours" class="space-y-10 scroll-mt-24">
+            <div>
+                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 02. Parcours Professionnel</h2>
+                <p class="mt-4 text-sm" style="color:var(--text-faint)">Deux stages effectués chez <strong style="color:var(--text-muted)">Howmet SAS</strong> durant ma formation BTS SIO SISR.</p>
+            </div>
+
+            <!-- Bloc 1 -->
+            <div class="xp-card">
+                <div class="xp-icon-wrap grad-purple">🖥️</div>
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+                        <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Technicien Systèmes et Réseaux</h3>
+                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                    </div>
+                    <p class="text-xs mb-3" style="color:var(--text-faint)">Assistant Informatique — 1ère année BTS SIO SISR</p>
+                    <div class="xp-badges">
+                        <span class="badge">📅 Mai 2025 – Juin 2025</span>
+                        <span class="badge accent">⏱ 5 semaines</span>
+                        <span class="badge blue">🔧 Support &amp; Déploiement</span>
+                    </div>
+                    <ul class="xp-tasks">
+                        <li><span class="check">✅</span><span><strong>Support utilisateur :</strong> Assistance technique de proximité, diagnostic et résolution des incidents matériels et logiciels du quotidien.</span></li>
+                        <li><span class="check">✅</span><span><strong>Déploiement de postes :</strong> Préparation, configuration et mise en service de nouveaux postes de travail (imaging, jonction domaine AD, GPO).</span></li>
+                        <li><span class="check">✅</span><span><strong>Script PowerShell :</strong> Développement d'un outil d'<em>énumération réseau</em> et de prise en main à distance RDP en 1 clic — gain de temps opérateur estimé à <strong>~70%</strong>.</span></li>
+                        <li><span class="check">✅</span><span><strong>Infrastructure physique :</strong> Installation de serveurs en baie rack, sécurisation de switches et organisation du câblage structuré.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bloc 2 -->
+            <div class="xp-card">
+                <div class="xp-icon-wrap grad-blue">🛠️</div>
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+                        <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Administrateur SI – Gestion de Projet</h3>
+                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                    </div>
+                    <p class="text-xs mb-3" style="color:var(--text-faint)">Technicien de Proximité / Projet — 2ème année BTS SIO SISR</p>
+                    <div class="xp-badges">
+                        <span class="badge">📅 Déc. 2025 – Fév. 2026</span>
+                        <span class="badge accent">⏱ 10 semaines</span>
+                        <span class="badge blue">🚀 Projet &amp; Infrastructure</span>
+                    </div>
+                    <ul class="xp-tasks">
+                        <li><span class="check">✅</span><span><strong>Pilotage de projet :</strong> Chef de projet technique pour la mise à niveau complète du parc — <strong>+180 clients légers Dell</strong> et périphériques remplacés en production.</span></li>
+                        <li><span class="check">✅</span><span><strong>Configuration réseau :</strong> Brassage des nouveaux équipements, gestion des VLANs Cisco et reconfiguration des baies selon plan de câblage.</span></li>
+                        <li><span class="check">✅</span><span><strong>Déploiement Wi-Fi :</strong> Installation et configuration de bornes Wi-Fi professionnelles en environnement industriel (couverture multi-zones, authentification réseau).</span></li>
+                        <li><span class="check">✅</span><span><strong>Management opérationnel :</strong> Animation de réunions hebdomadaires de suivi — reporting d'avancement, arbitrage des priorités et coordination des intervenants.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 03. COMPÉTENCES ── -->
+        <section id="competences" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 03. Compétences Techniques</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="card p-6 rounded-xl text-center">
+                    <div class="text-3xl mb-2">🖥️</div>
+                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Systèmes</h4>
+                    <p class="text-xs" style="color:var(--text-faint)">Windows Server, Active Directory, Linux Debian</p>
+                </div>
+                <div class="card p-6 rounded-xl text-center">
+                    <div class="text-3xl mb-2">⚙️</div>
+                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Automation</h4>
+                    <p class="text-xs" style="color:var(--text-faint)">Scripts PowerShell (75%), Gestion AD</p>
+                </div>
+                <div class="card p-6 rounded-xl text-center">
+                    <div class="text-3xl mb-2">🛡️</div>
+                    <h4 class="font-bold mb-2" style="color:var(--text-main)">Sécurité</h4>
+                    <p class="text-xs" style="color:var(--text-faint)">Hardening ANSSI, Architecture 3-Tiers</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 04. PROCÉDURES ── -->
+        <section id="procedures" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Procédures &amp; Travaux Pratiques</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-8 rounded-xl hover:border-emerald-500">
+                    <h3 class="text-xl font-bold mb-4" style="color:var(--text-main)">Architecture 3-Tiers sous Linux</h3>
+                    <p class="text-sm mb-6" style="color:var(--text-muted)">Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.</p>
+                    <a href="Procedure_3Tiers_Idriss_Yacoubi_V2.pdf" target="_blank"
+                       class="inline-block bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-lg text-xs transition-colors">
+                        VOIR LA PROCÉDURE
+                    </a>
+                </div>
+                <div class="card p-8 rounded-xl hover:border-blue-500">
+                    <h3 class="text-xl font-bold mb-4" style="color:var(--text-main)">Scripting PowerShell</h3>
+                    <p class="text-sm mb-6" style="color:var(--text-muted)">Automatisation du staging de postes et outil de listing RDP "1-clic".</p>
+                    <span class="text-blue-500 mono text-[10px] uppercase tracking-widest font-bold">Doc technique en ligne</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 05. VEILLE ── -->
+        <section id="veille" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 05. Veille Technologique</h2>
+            <div class="veille-card p-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 rounded-lg text-blue-500" style="background:rgba(59,130,246,0.15)">🐧</div>
+                    <h3 class="text-2xl font-bold mono" style="color:var(--text-main)">Cybersécurité des Systèmes Linux</h3>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 text-sm">
+                    <div class="space-y-4">
+                        <p class="italic" style="color:var(--text-muted)">"Focus sur les rootkits, le durcissement du noyau et les ransomwares ciblant les infrastructures critiques."</p>
+                        <div class="flex gap-2">
+                            <span class="veille-tag">ANSSI</span>
+                            <span class="veille-tag">The Hacker News</span>
+                        </div>
+                    </div>
+                    <div class="veille-inner">
+                        <h4 class="text-emerald-500 text-xs mb-2 mono font-bold">Objectif_Veille :</h4>
+                        <p class="text-xs leading-relaxed" style="color:var(--text-faint)">Anticiper les menaces sur les infrastructures Linux pour optimiser l'analyse SIEM en environnement SOC.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 06. E6 ── -->
+        <section id="e6" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 06. Parcours de Professionnalisation (E6)</h2>
+            <div class="e6-card p-8 rounded-xl flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <h3 class="text-xl font-bold" style="color:var(--text-main)">Tableau de Synthèse des Compétences</h3>
+                    <p class="text-sm mt-1" style="color:var(--text-muted)">Récapitulatif officiel des activités réalisées en entreprise et en formation.</p>
+                </div>
+                <a href="Tableau_Synthese_Idriss_Yacoubi.pdf" target="_blank"
+                   class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
+                    TÉLÉCHARGER LE PDF
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 mt-24">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-[10px] mono tracking-widest" style="color:var(--text-footer)">
+            <p>IDRISS YACOUBI © 2026 | BTS SIO SISR</p>
+            <p>CONSTRUIT AVEC PASSION POUR LE JURY</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = isDark ? 'Sombre' : 'Clair';
+        }
+    </script>
+</body>
+</html>
