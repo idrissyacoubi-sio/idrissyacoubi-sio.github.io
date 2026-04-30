@@ -246,7 +246,7 @@
             <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest font-medium items-center">
                 <a href="#profil"      class="nav-link">Profil</a>
                 <a href="#objectif"    class="nav-link">Objectif</a>
-                <a href="#parcours"    class="nav-link text-emerald-400">Parcours</a>
+                <a href="#parcours"    class="nav-link text-emerald-400">Stages</a>
                 <a href="#competences" class="nav-link">Compétences</a>
                 <a href="#procedures"  class="nav-link">Procédures</a>
                 <a href="#veille"      class="nav-link">Veille</a>
@@ -359,10 +359,10 @@
             </div>
         </section>
 
-        <!-- ── 03. PARCOURS PROFESSIONNEL ── -->
+        <!-- ── 03. STAGES ── -->
         <section id="parcours" class="space-y-10 scroll-mt-24">
             <div>
-                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 03. Parcours Professionnel</h2>
+                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 03. Stages</h2>
                 <p class="mt-4 text-sm" style="color:var(--text-faint)">Deux stages effectués chez <strong style="color:var(--text-muted)">Howmet SAS</strong> durant ma formation BTS SIO SISR.</p>
             </div>
 
@@ -665,6 +665,17 @@
         </div>
     </div>
 
+    <!-- PDF Viewer Modal -->
+    <div id="pdf-modal" class="hidden fixed inset-0 bg-black/90 z-[60] flex flex-col items-center justify-center backdrop-blur-sm">
+        <div class="w-full max-w-6xl flex justify-end p-4">
+            <button onclick="closePdfViewer()" class="px-4 py-2 text-xs font-bold rounded-lg hover:bg-white/10 transition-colors text-white">FERMER ✕</button>
+        </div>
+        <div class="w-full max-w-5xl h-[85vh] bg-white rounded-xl overflow-hidden mx-4 shadow-2xl border border-white/10 relative">
+            <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-900 text-white text-sm mono">Chargement du PDF...</div>
+            <iframe id="pdf-viewer-iframe" class="w-full h-full border-0 relative z-10 bg-white" src="" onload="document.getElementById('pdf-loader').style.display='none'"></iframe>
+        </div>
+    </div>
+
     <script>
         /* ── THEME ── */
         function toggleTheme() {
@@ -742,65 +753,43 @@
             const grid  = document.getElementById('proc-grid');
             const empty = document.getElementById('proc-empty');
 
-            // On ajoute aussi quelques procédures "statiques" si besoin, ou on affiche juste les fichiers GitHub
-            const statics = [
-                { title: 'Architecture 3-Tiers sous Linux', desc: 'Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.', color: 'emerald', static: true },
-                { title: 'Scripting PowerShell', desc: 'Automatisation du staging de postes et outil de listing RDP "1-clic".', color: 'blue', static: true }
-            ];
-
-            const combined = [...procedures.map((p, i) => {
-                const colors = ['emerald', 'blue', 'purple', 'rose'];
-                return {
-                    title: p.name.replace('.pdf', '').replace(/_/g, ' '),
-                    desc: 'Procédure technique récupérée depuis GitHub.',
-                    color: colors[i % colors.length],
-                    href: p.download_url,
-                    fileName: p.name,
-                    sha: p.sha,
-                    static: false
-                };
-            }), ...statics];
-
-            if (combined.length === 0) {
+            if (!procedures || procedures.length === 0) {
                 grid.innerHTML = '';
                 empty.classList.remove('hidden');
                 return;
             }
             empty.classList.add('hidden');
 
-            grid.innerHTML = combined.map(p => {
-                const c = COLORS[p.color] || COLORS.emerald;
+            grid.innerHTML = procedures.map((p, i) => {
+                const colors = ['emerald', 'blue', 'purple', 'rose'];
+                const colorKey = colors[i % colors.length];
+                const c = COLORS[colorKey] || COLORS.emerald;
+                
+                const title = p.name.replace('.pdf', '').replace(/_/g, ' ');
                 const btnStyle = c.btn;
                 const borderStyle = `border-left:4px solid ${c.border}`;
 
-                if (p.static && !p.href) {
-                    return `
-                    <div class="card p-8 rounded-xl" style="${borderStyle}">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
-                        </div>
-                        <p class="text-sm mb-6" style="color:var(--text-muted)">${p.desc}</p>
-                        <span class="mono text-xs font-bold uppercase tracking-widest" style="color:${c.label}">Bientôt disponible</span>
-                    </div>`;
-                } else {
-                    const isAdmin = localStorage.getItem('gh_admin_token') !== null;
-                    const deleteBtn = isAdmin ? `<button onclick="deleteProcedure('${p.fileName}', '${p.sha}')" class="px-3 py-2 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 rounded-lg text-xs font-bold transition-colors ml-3" title="Supprimer">🗑️</button>` : '';
-                    return `
-                    <div class="card p-8 rounded-xl" style="${borderStyle}">
-                        <div class="flex justify-between items-start mb-1">
-                            <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
-                        </div>
-                        ${p.fileName ? `<p class="text-xs mono mb-1" style="color:var(--text-faint)">📄 ${p.fileName}</p>` : ''}
-                        <p class="text-sm mt-2 mb-6" style="color:var(--text-muted)">${p.desc}</p>
-                        <div class="flex items-center">
-                            <a href="${p.href}" target="_blank"
-                               class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">
-                                CONSULTER
-                            </a>
-                            ${deleteBtn}
-                        </div>
-                    </div>`;
-                }
+                const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+                const deleteBtn = isAdmin ? `<button onclick="deleteProcedure('${p.name}', '${p.sha}')" class="px-3 py-2 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 rounded-lg text-xs font-bold transition-colors ml-3" title="Supprimer">🗑️</button>` : '';
+
+                return `
+                <div class="card p-8 rounded-xl" style="${borderStyle}">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold" style="color:var(--text-main)">${title}</h3>
+                    </div>
+                    <p class="text-sm mb-6" style="color:var(--text-muted)">Document PDF disponible en consultation ou téléchargement.</p>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openPdfViewer('${p.download_url}')"
+                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all hover:opacity-90" style="${btnStyle}">
+                            VISUALISER
+                        </button>
+                        <a href="${p.download_url}" target="_blank" title="Ouvrir dans un nouvel onglet"
+                           class="inline-block font-bold py-2 px-4 rounded-lg text-xs mono transition-all hover:bg-white/5" style="background:transparent; border:1px solid ${c.border}; color:${c.label}">
+                            NOUVEL ONGLET ↗
+                        </a>
+                        ${deleteBtn}
+                    </div>
+                </div>`;
             }).join('');
         }
 
@@ -820,9 +809,13 @@
                             <p class="text-xs mono mt-2" style="color:var(--text-faint)">📄 ${e6File.name}</p>
                         </div>
                         <div class="flex gap-3 flex-shrink-0">
-                            <a href="${e6File.download_url}" target="_blank"
+                            <button onclick="openPdfViewer('${e6File.download_url}')"
                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
-                                CONSULTER LE TABLEAU
+                                VISUALISER
+                            </button>
+                            <a href="${e6File.download_url}" target="_blank" title="Ouvrir dans un nouvel onglet"
+                               class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
+                                NOUVEL ONGLET ↗
                             </a>
                         </div>
                     </div>
@@ -870,6 +863,33 @@
 
         function closeAdminModal() {
             document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        /* ══════════════════════════════════════
+           PDF VIEWER MODAL
+           ══════════════════════════════════════ */
+        function openPdfViewer(url) {
+            const modal = document.getElementById('pdf-modal');
+            const iframe = document.getElementById('pdf-viewer-iframe');
+            const loader = document.getElementById('pdf-loader');
+            
+            loader.style.display = 'flex';
+            // Disable scroll on body
+            document.body.style.overflow = 'hidden';
+            
+            iframe.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closePdfViewer() {
+            const modal = document.getElementById('pdf-modal');
+            const iframe = document.getElementById('pdf-viewer-iframe');
+            
+            // Re-enable scroll
+            document.body.style.overflow = '';
+            
+            modal.classList.add('hidden');
+            setTimeout(() => { iframe.src = ''; }, 300); // Clear iframe after animation
         }
 
         async function saveAdminToken() {
@@ -933,18 +953,37 @@
 
             try {
                 const base64 = await getBase64(file);
-                const path = file.name;
+                const encodedPath = encodeURIComponent(file.name);
                 
-                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`, {
+                // Vérifier si le fichier existe déjà pour récupérer son SHA (nécessaire pour l'écraser)
+                let existingSha = null;
+                try {
+                    const checkRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (checkRes.ok) {
+                        const checkData = await checkRes.json();
+                        existingSha = checkData.sha;
+                    }
+                } catch (e) {
+                    // Ignorer, le fichier n'existe probablement pas encore
+                }
+                
+                const bodyPayload = {
+                    message: `Ajout/Mise à jour de la procédure: ${file.name}`,
+                    content: base64
+                };
+                if (existingSha) {
+                    bodyPayload.sha = existingSha;
+                }
+
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        message: `Upload procedure: ${file.name}`,
-                        content: base64
-                    })
+                    body: JSON.stringify(bodyPayload)
                 });
 
                 if (response.ok) {
@@ -955,7 +994,11 @@
                     fetchGitHubFiles(); // Refresh list
                 } else {
                     const err = await response.json();
-                    alert("Erreur lors de l'envoi : " + (err.message || 'Erreur inconnue'));
+                    let errorMsg = err.message || 'Erreur inconnue';
+                    if (response.status === 404) {
+                        errorMsg = "Non trouvé (404). Vérifiez que votre Token GitHub possède bien les droits 'repo' (Classic) ou 'Contents: Read and write' (Fine-grained).";
+                    }
+                    alert("Erreur lors de l'envoi : " + errorMsg);
                     btn.textContent = 'ENVOYER';
                     btn.disabled = false;
                 }
@@ -974,14 +1017,15 @@
             if (!token) return;
 
             try {
-                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${fileName}`, {
+                const encodedPath = encodeURIComponent(fileName);
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        message: `Delete procedure: ${fileName}`,
+                        message: `Suppression de la procédure: ${fileName}`,
                         sha: sha
                     })
                 });
@@ -990,7 +1034,11 @@
                     fetchGitHubFiles(); // Refresh list
                 } else {
                     const err = await response.json();
-                    alert("Erreur lors de la suppression: " + (err.message || ""));
+                    let errorMsg = err.message || 'Erreur inconnue';
+                    if (response.status === 404) {
+                        errorMsg = "Non trouvé (404). Vérifiez que votre Token a les droits 'repo'.";
+                    }
+                    alert("Erreur lors de la suppression: " + errorMsg);
                 }
             } catch (error) {
                 console.error(error);
