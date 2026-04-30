@@ -512,96 +512,25 @@
             </div>
         </section>
 
-        <!-- ── 04. PROCÉDURES ── -->
+        <!-- ── 05. PROCÉDURES ── -->
         <section id="procedures" class="space-y-8 scroll-mt-24">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 05. Procédures &amp; Travaux Pratiques</h2>
-                <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
-                        class="flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold mono transition-all"
-                        style="background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.4);color:#10b981">
-                    <span>＋</span> Ajouter une procédure
-                </button>
+                <p class="text-sm" style="color:var(--text-faint)">Les procédures sont automatiquement récupérées depuis GitHub.</p>
             </div>
 
             <!-- Grille des procédures -->
-            <div id="proc-grid" class="grid md:grid-cols-2 gap-8"></div>
+            <div id="proc-grid" class="grid md:grid-cols-2 gap-8">
+                <!-- Les procédures seront injectées ici -->
+                <div class="col-span-2 text-center text-sm py-10" style="color:var(--text-faint)">⏳ Chargement des procédures depuis GitHub...</div>
+            </div>
 
             <!-- Message si vide -->
             <div id="proc-empty" class="card p-10 rounded-xl text-center hidden">
                 <div class="text-4xl mb-3">📂</div>
-                <p class="text-sm" style="color:var(--text-faint)">Aucune procédure pour l'instant.<br>Cliquez sur <strong style="color:#10b981">Ajouter une procédure</strong> pour commencer.</p>
+                <p class="text-sm" style="color:var(--text-faint)">Aucune procédure trouvée sur le répertoire GitHub.</p>
             </div>
         </section>
-
-        <!-- ══════════════════════════════════════════
-             MODAL D'UPLOAD
-             ══════════════════════════════════════════ -->
-        <div id="uploadModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px)">
-            <div class="w-full max-w-lg rounded-2xl p-8 space-y-6" style="background:var(--bg-card);border:1px solid var(--border-color);backdrop-filter:blur(20px)">
-                <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-bold mono" style="color:var(--text-main)">Nouvelle procédure</h3>
-                    <button onclick="closeModal()" class="text-xl" style="color:var(--text-faint)">&times;</button>
-                </div>
-
-                <!-- Titre -->
-                <div>
-                    <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Titre *</label>
-                    <input id="inp-title" type="text" placeholder="Ex: Architecture 3-Tiers sous Linux"
-                           class="w-full rounded-lg px-4 py-2 text-sm outline-none"
-                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)">
-                </div>
-
-                <!-- Description -->
-                <div>
-                    <label class="block text-xs mono mb-1" style="color:var(--text-faint)">Description</label>
-                    <textarea id="inp-desc" rows="2" placeholder="Courte description de la procédure..."
-                              class="w-full rounded-lg px-4 py-2 text-sm outline-none resize-none"
-                              style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-main)"></textarea>
-                </div>
-
-                <!-- Fichier PDF -->
-                <div>
-                    <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Fichier PDF *</label>
-                    <label id="drop-zone" for="inp-file"
-                           class="flex flex-col items-center justify-center gap-2 rounded-xl p-8 cursor-pointer transition-all"
-                           style="border:2px dashed var(--border-color);color:var(--text-faint)"
-                           ondragover="event.preventDefault();this.style.borderColor='#10b981'"
-                           ondragleave="this.style.borderColor='var(--border-color)'"
-                           ondrop="handleDrop(event)">
-                        <span class="text-3xl">📄</span>
-                        <span class="text-xs mono">Glisser-déposer ou <span style="color:#10b981">parcourir</span></span>
-                        <span id="file-name" class="text-xs" style="color:var(--text-faint)">Aucun fichier sélectionné</span>
-                    </label>
-                    <input id="inp-file" type="file" accept=".pdf" class="hidden" onchange="handleFileSelect(this)">
-                </div>
-
-                <!-- Couleur de la carte -->
-                <div>
-                    <label class="block text-xs mono mb-2" style="color:var(--text-faint)">Couleur d'accent</label>
-                    <div class="flex gap-3">
-                        <label class="cursor-pointer"><input type="radio" name="color" value="emerald" class="hidden" checked>
-                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#10b981;border-color:transparent" onclick="selectColor(this,'emerald')"></span></label>
-                        <label class="cursor-pointer"><input type="radio" name="color" value="blue" class="hidden">
-                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#3b82f6;border-color:transparent" onclick="selectColor(this,'blue')"></span></label>
-                        <label class="cursor-pointer"><input type="radio" name="color" value="purple" class="hidden">
-                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#8b5cf6;border-color:transparent" onclick="selectColor(this,'purple')"></span></label>
-                        <label class="cursor-pointer"><input type="radio" name="color" value="rose" class="hidden">
-                            <span class="color-swatch block w-7 h-7 rounded-full border-2" style="background:#f43f5e;border-color:transparent" onclick="selectColor(this,'rose')"></span></label>
-                    </div>
-                </div>
-
-                <!-- Erreur -->
-                <p id="upload-error" class="text-xs hidden" style="color:#f87171"></p>
-
-                <!-- Boutons -->
-                <div class="flex gap-3 justify-end pt-2">
-                    <button onclick="closeModal()" class="px-5 py-2 rounded-lg text-xs mono transition-all"
-                            style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">Annuler</button>
-                    <button onclick="saveProcedure()" class="px-5 py-2 rounded-lg text-xs mono font-bold transition-all"
-                            style="background:#10b981;color:#fff">Enregistrer</button>
-                </div>
-            </div>
-        </div>
 
         <!-- ── 05. VEILLE ── -->
         <section id="veille" class="space-y-8 scroll-mt-24">
@@ -756,115 +685,50 @@
             renderE6();
         });
 
-        /* ── FILE HANDLING ── */
-        function handleFileSelect(input) {
-            const file = input.files[0];
-            if (file) readFile(file);
-        }
-        function handleDrop(e) {
-            e.preventDefault();
-            document.getElementById('drop-zone').style.borderColor = 'var(--border-color)';
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/pdf') readFile(file);
-            else showError('Veuillez déposer un fichier PDF.');
-        }
-        function readFile(file) {
-            selectedFileName = file.name;
-            document.getElementById('file-name').textContent = file.name;
-            const reader = new FileReader();
-            reader.onload = e => { selectedFileB64 = e.target.result; };
-            reader.readAsDataURL(file);
-        }
-
-        /* ── MODAL ── */
-        function closeModal() {
-            document.getElementById('uploadModal').classList.add('hidden');
-            document.getElementById('inp-title').value = '';
-            document.getElementById('inp-desc').value = '';
-            document.getElementById('inp-file').value = '';
-            document.getElementById('file-name').textContent = 'Aucun fichier sélectionné';
-            document.getElementById('upload-error').classList.add('hidden');
-            selectedFileB64 = null;
-            selectedFileName = '';
-        }
-        function showError(msg) {
-            const el = document.getElementById('upload-error');
-            el.textContent = msg;
-            el.classList.remove('hidden');
+        /* ── FETCH & RENDER ── */
+        async function fetchGitHubFiles() {
+            try {
+                // Utilisation de l'API GitHub pour lister les fichiers du dossier principal
+                const response = await fetch('https://api.github.com/repos/idrissyacoubi-sio/idrissyacoubi-sio.github.io/contents/');
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                
+                // Filtrer les fichiers PDF
+                const pdfFiles = data.filter(file => file.name.endsWith('.pdf'));
+                
+                // Séparer le tableau de synthèse des autres procédures
+                const e6File = pdfFiles.find(f => f.name.toLowerCase().includes('synthese') || f.name.toLowerCase().includes('tableau'));
+                const procedures = pdfFiles.filter(f => f !== e6File);
+                
+                renderAll(procedures);
+                renderE6(e6File);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des fichiers :", error);
+                document.getElementById('proc-grid').innerHTML = '<div class="col-span-2 text-center text-sm py-10" style="color:#f87171">Impossible de charger les procédures. Vérifiez votre connexion.</div>';
+            }
         }
 
-        /* ── SAVE ── */
-        function saveProcedure() {
-            const title = document.getElementById('inp-title').value.trim();
-            const desc  = document.getElementById('inp-desc').value.trim();
-            if (!title)          return showError('Le titre est obligatoire.');
-            if (!selectedFileB64) return showError('Veuillez sélectionner un fichier PDF.');
-
-            const id = 'proc_' + Date.now();
-            const proc = { id, title, desc, color: selectedColor, fileName: selectedFileName, fileB64: selectedFileB64, createdAt: new Date().toLocaleDateString('fr-FR') };
-
-            // Save to localStorage
-            const all = getAll();
-            all.push(proc);
-            localStorage.setItem('portfolio_procedures', JSON.stringify(all));
-
-            closeModal();
-            renderAll();
-        }
-
-        /* ── VIEW PDF ── */
-        function viewProcedure(id) {
-            const proc = getAll().find(p => p.id === id);
-            if (!proc || !proc.fileB64) return;
-            // Convert base64 data URL to Blob to bypass browser security restrictions
-            const [meta, b64] = proc.fileB64.split(',');
-            const binary = atob(b64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
-        }
-
-        /* ── DELETE ── */
-        function deleteProcedure(id) {
-            if (!confirm('Supprimer cette procédure ?')) return;
-            const all = getAll().filter(p => p.id !== id);
-            localStorage.setItem('portfolio_procedures', JSON.stringify(all));
-            renderAll();
-        }
-        function deleteStaticProcedure(id) {
-            if (!confirm('Supprimer définitivement cette procédure ?')) return;
-            const hidden = getHiddenStatics();
-            if (!hidden.includes(id)) hidden.push(id);
-            localStorage.setItem('portfolio_hidden_statics', JSON.stringify(hidden));
-            renderAll();
-        }
-        function getHiddenStatics() {
-            try { return JSON.parse(localStorage.getItem('portfolio_hidden_statics') || '[]'); }
-            catch { return []; }
-        }
-
-        /* ── STORAGE ── */
-        function getAll() {
-            try { return JSON.parse(localStorage.getItem('portfolio_procedures') || '[]'); }
-            catch { return []; }
-        }
-
-        /* ── RENDER ── */
-        function renderAll() {
+        function renderAll(procedures) {
             const grid  = document.getElementById('proc-grid');
             const empty = document.getElementById('proc-empty');
-            const all   = getAll();
 
-            // Built-in static cards (filter hidden ones)
-            const hiddenStatics = getHiddenStatics();
+            // On ajoute aussi quelques procédures "statiques" si besoin, ou on affiche juste les fichiers GitHub
             const statics = [
-                { id: 'static-1', title: 'Architecture 3-Tiers sous Linux', desc: 'Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.', color: 'emerald', href: 'Procedure_3Tiers_Idriss_Yacoubi_V2.pdf', static: true },
-                { id: 'static-2', title: 'Scripting PowerShell', desc: 'Automatisation du staging de postes et outil de listing RDP "1-clic".', color: 'blue', href: null, static: true },
-            ].filter(s => !hiddenStatics.includes(s.id));
+                { title: 'Architecture 3-Tiers sous Linux', desc: 'Segmentation réseau et isolation des services Web et BDD (MariaDB) sur Debian.', color: 'emerald', static: true },
+                { title: 'Scripting PowerShell', desc: 'Automatisation du staging de postes et outil de listing RDP "1-clic".', color: 'blue', static: true }
+            ];
 
-            const combined = [...statics, ...all];
+            const combined = [...procedures.map((p, i) => {
+                const colors = ['emerald', 'blue', 'purple', 'rose'];
+                return {
+                    title: p.name.replace('.pdf', '').replace(/_/g, ' '),
+                    desc: 'Procédure technique récupérée depuis GitHub.',
+                    color: colors[i % colors.length],
+                    href: p.download_url,
+                    fileName: p.name,
+                    static: false
+                };
+            }), ...statics];
 
             if (combined.length === 0) {
                 grid.innerHTML = '';
@@ -878,150 +742,73 @@
                 const btnStyle = c.btn;
                 const borderStyle = `border-left:4px solid ${c.border}`;
 
-                if (p.static) {
-                    // Static card
-                    const btnHtml = p.href
-                        ? `<a href="${p.href}" target="_blank" class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">VOIR LA PROCÉDURE</a>`
-                        : `<span class="mono text-xs font-bold uppercase tracking-widest" style="color:${c.label}">Doc technique en ligne</span>`;
+                if (p.static && !p.href) {
                     return `
                     <div class="card p-8 rounded-xl" style="${borderStyle}">
-                        <button onclick="deleteStaticProcedure('${p.id}')" class="proc-delete-btn" title="Masquer cette procédure">✕</button>
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
                         </div>
                         <p class="text-sm mb-6" style="color:var(--text-muted)">${p.desc}</p>
-                        ${btnHtml}
+                        <span class="mono text-xs font-bold uppercase tracking-widest" style="color:${c.label}">Bientôt disponible</span>
                     </div>`;
                 } else {
-                    // Uploaded card
                     return `
                     <div class="card p-8 rounded-xl" style="${borderStyle}">
-                        <button onclick="deleteProcedure('${p.id}')" class="proc-delete-btn" title="Supprimer cette procédure">✕</button>
                         <div class="flex justify-between items-start mb-1">
                             <h3 class="text-xl font-bold" style="color:var(--text-main)">${p.title}</h3>
                         </div>
-                        <p class="text-xs mono mb-1" style="color:var(--text-faint)">📅 Ajouté le ${p.createdAt} · 📄 ${p.fileName}</p>
-                        ${p.desc ? `<p class="text-sm mt-2 mb-6" style="color:var(--text-muted)">${p.desc}</p>` : '<div class="mb-6"></div>'}
-                        <a href="${p.fileB64}" download="${p.fileName}"
-                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all mr-2" style="${btnStyle}">
-                            TÉLÉCHARGER
+                        ${p.fileName ? `<p class="text-xs mono mb-1" style="color:var(--text-faint)">📄 ${p.fileName}</p>` : ''}
+                        <p class="text-sm mt-2 mb-6" style="color:var(--text-muted)">${p.desc}</p>
+                        <a href="${p.href}" target="_blank"
+                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all" style="${btnStyle}">
+                            CONSULTER
                         </a>
-                        <button onclick="viewProcedure('${p.id}')"
-                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all"
-                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted);cursor:pointer">
-                            VOIR
-                        </button>
                     </div>`;
                 }
             }).join('');
         }
 
         /* ══════════════════════════════════════
-           E6 — TABLEAU DE SYNTHÈSE (UPLOAD)
+           E6 — TABLEAU DE SYNTHÈSE (FETCH GITHUB)
            ══════════════════════════════════════ */
-        function renderE6() {
+        function renderE6(e6File) {
             const container = document.getElementById('e6-content');
-            const saved = getE6();
 
-            if (saved) {
-                // Fichier uploadé → afficher la carte avec actions
+            if (e6File) {
                 container.innerHTML = `
                 <div class="e6-card p-8 rounded-xl" style="position:relative">
-                    <button onclick="deleteE6()" class="proc-delete-btn" title="Supprimer le tableau">✕</button>
                     <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                         <div>
                             <h3 class="text-xl font-bold" style="color:var(--text-main)">Tableau de Synthèse des Compétences</h3>
                             <p class="text-sm mt-1" style="color:var(--text-muted)">Récapitulatif officiel des activités réalisées en entreprise et en formation.</p>
-                            <p class="text-xs mono mt-2" style="color:var(--text-faint)">📄 ${saved.fileName} · 📅 Ajouté le ${saved.createdAt}</p>
+                            <p class="text-xs mono mt-2" style="color:var(--text-faint)">📄 ${e6File.name}</p>
                         </div>
                         <div class="flex gap-3 flex-shrink-0">
-                            <a href="${saved.fileB64}" download="${saved.fileName}"
+                            <a href="${e6File.download_url}" target="_blank"
                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
-                                TÉLÉCHARGER
+                                CONSULTER LE TABLEAU
                             </a>
-                            <button onclick="viewE6()"
-                                    class="font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap"
-                                    style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted);cursor:pointer">
-                                VOIR
-                            </button>
                         </div>
                     </div>
                 </div>`;
             } else {
-                // Pas de fichier → zone d'upload
                 container.innerHTML = `
                 <div class="e6-card p-8 rounded-xl">
-                    <div class="flex flex-col md:flex-row justify-between items-start gap-6 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start gap-6">
                         <div>
                             <h3 class="text-xl font-bold" style="color:var(--text-main)">Tableau de Synthèse des Compétences</h3>
                             <p class="text-sm mt-1" style="color:var(--text-muted)">Récapitulatif officiel des activités réalisées en entreprise et en formation.</p>
                         </div>
+                        <span class="text-xs mono px-4 py-2 rounded-full font-bold" style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-faint)">
+                            NON PUBLIÉ
+                        </span>
                     </div>
-                    <label id="e6-drop-zone" for="e6-file-input"
-                           class="flex flex-col items-center justify-center gap-3 rounded-xl p-10 cursor-pointer transition-all"
-                           style="border:2px dashed var(--border-color);color:var(--text-faint)"
-                           ondragover="event.preventDefault();this.style.borderColor='#3b82f6'"
-                           ondragleave="this.style.borderColor='var(--border-color)'"
-                           ondrop="handleE6Drop(event)">
-                        <span class="text-4xl">📋</span>
-                        <span class="text-sm mono">Glisser-déposer votre tableau de synthèse ici</span>
-                        <span class="text-xs">ou <span style="color:#3b82f6;font-weight:bold">parcourir</span> pour sélectionner un fichier PDF</span>
-                        <span id="e6-file-name" class="text-xs" style="color:var(--text-faint)"></span>
-                    </label>
-                    <input id="e6-file-input" type="file" accept=".pdf" class="hidden" onchange="handleE6FileSelect(this)">
-                    <p id="e6-error" class="text-xs mt-3 hidden" style="color:#f87171"></p>
                 </div>`;
             }
         }
 
-        function handleE6FileSelect(input) {
-            const file = input.files[0];
-            if (file) readE6File(file);
-        }
-        function handleE6Drop(e) {
-            e.preventDefault();
-            document.getElementById('e6-drop-zone').style.borderColor = 'var(--border-color)';
-            const file = e.dataTransfer.files[0];
-            if (file && file.type === 'application/pdf') readE6File(file);
-            else {
-                const err = document.getElementById('e6-error');
-                err.textContent = 'Veuillez déposer un fichier PDF.';
-                err.classList.remove('hidden');
-            }
-        }
-        function readE6File(file) {
-            document.getElementById('e6-file-name').textContent = '⏳ Chargement de ' + file.name + '...';
-            const reader = new FileReader();
-            reader.onload = e => {
-                const data = {
-                    fileName: file.name,
-                    fileB64: e.target.result,
-                    createdAt: new Date().toLocaleDateString('fr-FR')
-                };
-                localStorage.setItem('portfolio_e6', JSON.stringify(data));
-                renderE6();
-            };
-            reader.readAsDataURL(file);
-        }
-        function getE6() {
-            try { return JSON.parse(localStorage.getItem('portfolio_e6')); }
-            catch { return null; }
-        }
-        function deleteE6() {
-            if (!confirm('Supprimer le tableau de synthèse ?')) return;
-            localStorage.removeItem('portfolio_e6');
-            renderE6();
-        }
-        function viewE6() {
-            const saved = getE6();
-            if (!saved || !saved.fileB64) return;
-            const [meta, b64] = saved.fileB64.split(',');
-            const binary = atob(b64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            window.open(URL.createObjectURL(blob), '_blank');
-        }
+        // Lancer la récupération au chargement
+        window.addEventListener('DOMContentLoaded', fetchGitHubFiles);
     </script>
 </body>
 </html>
