@@ -597,7 +597,7 @@
             renderAll();
         }
         function deleteStaticProcedure(id) {
-            if (!confirm('Masquer cette procédure ? (Rechargez la page pour la restaurer)')) return;
+            if (!confirm('Supprimer définitivement cette procédure ?')) return;
             const hidden = getHiddenStatics();
             if (!hidden.includes(id)) hidden.push(id);
             localStorage.setItem('portfolio_hidden_statics', JSON.stringify(hidden));
