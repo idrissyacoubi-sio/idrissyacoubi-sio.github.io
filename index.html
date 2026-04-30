@@ -772,6 +772,8 @@
                 const isAdmin = localStorage.getItem('gh_admin_token') !== null;
                 const deleteBtn = isAdmin ? `<button onclick="deleteProcedure('${p.name}', '${p.sha}')" class="px-3 py-2 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 rounded-lg text-xs font-bold transition-colors ml-3" title="Supprimer">🗑️</button>` : '';
 
+                const pdfUrl = './' + encodeURIComponent(p.name);
+
                 return `
                 <div class="card p-8 rounded-xl" style="${borderStyle}">
                     <div class="flex justify-between items-start mb-4">
@@ -779,11 +781,11 @@
                     </div>
                     <p class="text-sm mb-6" style="color:var(--text-muted)">Document PDF disponible en consultation ou téléchargement.</p>
                     <div class="flex items-center gap-2">
-                        <button onclick="openPdfViewer('${p.download_url}')"
+                        <button onclick="openPdfViewer('${pdfUrl}')"
                            class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all hover:opacity-90" style="${btnStyle}">
                             VISUALISER
                         </button>
-                        <a href="${p.download_url}" target="_blank" title="Ouvrir dans un nouvel onglet"
+                        <a href="${pdfUrl}" target="_blank" title="Ouvrir dans un nouvel onglet"
                            class="inline-block font-bold py-2 px-4 rounded-lg text-xs mono transition-all hover:bg-white/5" style="background:transparent; border:1px solid ${c.border}; color:${c.label}">
                             NOUVEL ONGLET ↗
                         </a>
@@ -809,11 +811,11 @@
                             <p class="text-xs mono mt-2" style="color:var(--text-faint)">📄 ${e6File.name}</p>
                         </div>
                         <div class="flex gap-3 flex-shrink-0">
-                            <button onclick="openPdfViewer('${e6File.download_url}')"
+                            <button onclick="openPdfViewer('./${encodeURIComponent(e6File.name)}')"
                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
                                 VISUALISER
                             </button>
-                            <a href="${e6File.download_url}" target="_blank" title="Ouvrir dans un nouvel onglet"
+                            <a href="./${encodeURIComponent(e6File.name)}" target="_blank" title="Ouvrir dans un nouvel onglet"
                                class="border border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
                                 NOUVEL ONGLET ↗
                             </a>
