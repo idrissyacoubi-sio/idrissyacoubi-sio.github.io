@@ -529,88 +529,88 @@
         <!-- ── 05. VEILLE ── -->
         <section id="veille" class="space-y-8 scroll-mt-24">
             <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 06. Veille Technologique</h2>
+            <p class="text-sm mt-2" style="color:var(--text-faint)">Cybersécurité des Systèmes Linux — Mes trois sources principales de veille.</p>
 
-            <!-- Bloc principal -->
-            <div class="veille-card p-8">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 rounded-lg text-blue-500" style="background:rgba(59,130,246,0.15)">🐧</div>
-                    <div>
-                        <h3 class="text-2xl font-bold mono" style="color:var(--text-main)">Cybersécurité des Systèmes Linux</h3>
-                        <p class="text-xs mt-1" style="color:var(--text-faint)">Sujet choisi dans le cadre du BTS SIO SISR — veille active depuis 2025</p>
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <!-- ANSSI -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#10b981">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(16,185,129,0.15)">🛡️</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">ANSSI</h3>
+                            <p class="text-[10px] mono text-emerald-500">cyber.gouv.fr</p>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Contexte -->
-                <div class="mb-6">
-                    <p class="text-sm leading-relaxed" style="color:var(--text-muted)">
-                        Linux propulse <strong style="color:var(--text-main)">plus de 96% des serveurs web mondiaux</strong> et constitue le socle de la majorité des infrastructures critiques (cloud, IoT industriel, conteneurs).
-                        Cette omniprésence en fait une cible privilégiée : <strong style="color:var(--text-main)">rootkits noyau</strong>, <strong style="color:var(--text-main)">ransomwares ciblant ESXi</strong>, et <strong style="color:var(--text-main)">élévations de privilèges 0-day</strong>
-                        sont en hausse constante depuis 2023. Ma veille vise à comprendre ces menaces pour mieux y répondre en contexte SOC.
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        L'agence nationale publie régulièrement des guides de durcissement et des alertes CERT-FR sur les menaces ciblant les systèmes Linux.
                     </p>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-8 text-sm">
-                    <!-- Thématiques clés -->
-                    <div class="space-y-4">
-                        <h4 class="text-blue-400 text-xs mono font-bold uppercase tracking-wider">Thématiques_Clés :</h4>
-                        <ul class="space-y-3 text-sm" style="color:var(--text-muted)">
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">▹</span><span><strong style="color:var(--text-main)">Rootkits &amp; malwares noyau</strong> — Mécanismes d'injection dans le kernel Linux, détection via <em>rkhunter</em>, <em>chkrootkit</em> et outils forensiques.</span></li>
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">▹</span><span><strong style="color:var(--text-main)">Durcissement système (hardening)</strong> — Application des recommandations ANSSI : gestion des permissions, sécurisation SSH, configuration de <em>SELinux</em>/<em>AppArmor</em>.</span></li>
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">▹</span><span><strong style="color:var(--text-main)">Ransomwares sur infrastructures</strong> — Analyse des attaques ciblant VMware ESXi et les environnements de conteneurs Docker/Kubernetes.</span></li>
-                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">▹</span><span><strong style="color:var(--text-main)">Vulnérabilités &amp; CVE</strong> — Suivi des failles critiques du noyau Linux, élévations de privilèges (Dirty Pipe, Looney Tunables…) et patches associés.</span></li>
-                        </ul>
-                    </div>
-
-                    <!-- Objectif + Sources -->
-                    <div class="space-y-4">
-                        <div class="veille-inner">
-                            <h4 class="text-emerald-500 text-xs mb-2 mono font-bold">Objectif_Veille :</h4>
-                            <p class="text-xs leading-relaxed" style="color:var(--text-faint)">
-                                Anticiper les menaces sur les infrastructures Linux pour optimiser la détection SIEM et la réponse aux incidents en environnement SOC.
-                                Alimenter une base de connaissances exploitable pour le <strong style="color:var(--text-muted)">hardening proactif</strong> et l'<strong style="color:var(--text-muted)">analyse forensique</strong>.
-                            </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-emerald-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Guide de durcissement GNU/Linux (v2)</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Recommandations de configuration sécurisée : partitionnement, gestion des droits, désactivation des services inutiles, sécurisation SSH et pare-feu.</p>
                         </div>
-                        <div class="veille-inner">
-                            <h4 class="text-blue-400 text-xs mb-3 mono font-bold">Sources_Principales :</h4>
-                            <div class="space-y-2">
-                                <div class="flex items-center gap-2">
-                                    <span class="veille-tag">🛡️ ANSSI</span>
-                                    <span class="text-xs" style="color:var(--text-faint)">— Guides de durcissement, alertes CERT-FR</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="veille-tag">📰 The Hacker News</span>
-                                    <span class="text-xs" style="color:var(--text-faint)">— Actualités cyber, analyses de menaces</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="veille-tag">🐧 LinuxToday</span>
-                                    <span class="text-xs" style="color:var(--text-faint)">— Actualités écosystème Linux, sécurité kernel</span>
-                                </div>
-                            </div>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-emerald-500">Alerte CERT-FR</p>
+                            <p class="text-xs" style="color:var(--text-main)">CVE-2024-1086 — Élévation de privilèges noyau</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Faille dans le module nf_tables du noyau Linux permettant une élévation de privilèges locale. Correctif critique appliqué en urgence.</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Méthodologie -->
-                <div class="mt-8 pt-6" style="border-top:1px solid var(--border-color)">
-                    <h4 class="text-emerald-500 text-xs mono font-bold mb-4 uppercase tracking-wider">Méthodologie_Veille :</h4>
-                    <div class="grid sm:grid-cols-3 gap-4">
-                        <div class="veille-inner text-center">
-                            <div class="text-2xl mb-2">📡</div>
-                            <p class="text-xs font-bold mb-1" style="color:var(--text-main)">Collecte</p>
-                            <p class="text-xs" style="color:var(--text-faint)">Flux RSS, newsletters CERT-FR, alertes CVE automatisées</p>
+                <!-- The Hacker News -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#3b82f6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(59,130,246,0.15)">📰</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">The Hacker News</h3>
+                            <p class="text-[10px] mono text-blue-500">thehackernews.com</p>
                         </div>
-                        <div class="veille-inner text-center">
-                            <div class="text-2xl mb-2">🔍</div>
-                            <p class="text-xs font-bold mb-1" style="color:var(--text-main)">Analyse</p>
-                            <p class="text-xs" style="color:var(--text-faint)">Tri par criticité, reproduction en lab virtuel, documentation technique</p>
+                    </div>
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        Source incontournable pour les actualités cybersécurité mondiales : analyses de malwares, vulnérabilités et campagnes d'attaques en cours.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-blue-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Ransomware Akira cible les serveurs Linux ESXi</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Le groupe Akira déploie un variant Linux de son ransomware ciblant spécifiquement les hyperviseurs VMware ESXi pour chiffrer les machines virtuelles.</p>
                         </div>
-                        <div class="veille-inner text-center">
-                            <div class="text-2xl mb-2">📋</div>
-                            <p class="text-xs font-bold mb-1" style="color:var(--text-main)">Diffusion</p>
-                            <p class="text-xs" style="color:var(--text-faint)">Synthèse documentée, partage avec l'équipe, mise à jour des procédures</p>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-blue-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Perfctl : malware furtif infectant des milliers de serveurs Linux</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Un malware utilise des rootkits pour se dissimuler sur des serveurs Linux, exploitant des failles connues pour du minage de crypto et du proxyjacking.</p>
                         </div>
                     </div>
                 </div>
+
+                <!-- LinuxToday -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#8b5cf6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(139,92,246,0.15)">🐧</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">LinuxToday</h3>
+                            <p class="text-[10px] mono text-purple-500">linuxtoday.com</p>
+                        </div>
+                    </div>
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        Agrégateur d'actualités sur l'écosystème Linux : mises à jour du noyau, nouvelles distributions, outils de sécurité et bonnes pratiques admin.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-purple-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Linux Kernel 6.8 : renforcement de la sécurité mémoire</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Le noyau 6.8 intègre de nouvelles protections mémoire et améliore le support de Rust dans le kernel pour réduire les vulnérabilités liées au C.</p>
+                        </div>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-purple-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Backdoor découverte dans xz-utils (CVE-2024-3094)</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Une porte dérobée a été insérée dans la librairie de compression xz, menaçant les connexions SSH de nombreuses distributions Linux majeures.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </section>
 
