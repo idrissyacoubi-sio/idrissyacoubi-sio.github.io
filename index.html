@@ -589,6 +589,20 @@
             renderAll();
         }
 
+        /* ── VIEW PDF ── */
+        function viewProcedure(id) {
+            const proc = getAll().find(p => p.id === id);
+            if (!proc || !proc.fileB64) return;
+            // Convert base64 data URL to Blob to bypass browser security restrictions
+            const [meta, b64] = proc.fileB64.split(',');
+            const binary = atob(b64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            const blob = new Blob([bytes], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        }
+
         /* ── DELETE ── */
         function deleteProcedure(id) {
             if (!confirm('Supprimer cette procédure ?')) return;
@@ -669,11 +683,11 @@
                            class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all mr-2" style="${btnStyle}">
                             TÉLÉCHARGER
                         </a>
-                        <a href="${p.fileB64}" target="_blank"
+                        <button onclick="viewProcedure('${p.id}')"
                            class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all"
-                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted)">
+                           style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-muted);cursor:pointer">
                             VOIR
-                        </a>
+                        </button>
                     </div>`;
                 }
             }).join('');
