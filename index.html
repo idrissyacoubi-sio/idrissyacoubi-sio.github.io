@@ -1111,7 +1111,7 @@
                 if (response.ok) {
                     cvBtn.textContent = '✅ CV MIS À JOUR !';
                     cvBtn.style.pointerEvents = '';
-                    setTimeout(() => { cvBtn.textContent = '📄 TÉLÉCHARGER MON CV'; }, 2500);
+                    setTimeout(() => { cvBtn.textContent = '📄 VOIR MON CV'; }, 2500);
                     inputEl.value = '';
                 } else {
                     const err = await response.json();
