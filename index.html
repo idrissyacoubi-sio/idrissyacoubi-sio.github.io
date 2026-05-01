@@ -279,11 +279,11 @@
                     </div>
                     <!-- CV Button -->
                     <div class="flex items-center gap-3 pt-1">
-                        <a id="cv-download-btn" href="./CV_Idriss_Yacoubi.pdf" target="_blank"
-                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold mono transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 hover:scale-105"
+                        <button id="cv-download-btn" onclick="openPdfViewer('./CV_Idriss_Yacoubi.pdf')"
+                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold mono transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 hover:scale-105 cursor-pointer"
                            style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;">
-                            📄 TÉLÉCHARGER MON CV
-                        </a>
+                            📄 VOIR MON CV
+                        </button>
                         <!-- Bouton upload CV (admin seulement) -->
                         <label id="cv-upload-label" class="hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold mono cursor-pointer transition-all duration-300 hover:scale-105"
                                style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-muted);">
