@@ -757,9 +757,9 @@
                 // Filtrer les fichiers PDF
                 const pdfFiles = data.filter(file => file.name.endsWith('.pdf'));
                 
-                // Séparer le tableau de synthèse des autres procédures
+                // Séparer le tableau de synthèse et le CV des autres procédures
                 const e6File = pdfFiles.find(f => f.name.toLowerCase().includes('synthese') || f.name.toLowerCase().includes('tableau'));
-                const procedures = pdfFiles.filter(f => f !== e6File);
+                const procedures = pdfFiles.filter(f => f !== e6File && !f.name.toLowerCase().startsWith('cv'));
                 
                 renderAll(procedures);
                 renderE6(e6File);
