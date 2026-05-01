@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idriss Yacoubi | Portfolio BTS SIO</title>
+    <script>
+        // Suppress Tailwind CDN production warning
+        if (typeof window !== 'undefined') {
+            const _warn = console.warn.bind(console);
+            console.warn = (...args) => {
+                if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+                _warn(...args);
+            };
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── DARK THEME (défaut) ── */
+        :root[data-theme="dark"] {
+            --bg-main:          #0f172a;
+            --bg-nav:           rgba(15, 23, 42, 0.95);
+            --bg-card:          rgba(30, 41, 59, 0.75);
+            --bg-footer:        rgba(15, 23, 42, 0.85);
+            --bg-tag:           #1e293b;
+            --bg-veille-block:  rgba(15, 23, 42, 0.5);
+            --bg-veille-inner:  rgba(30, 41, 59, 0.6);
+            --bg-e6-card:       linear-gradient(135deg, #1e293b, #0f172a);
+            --text-main:        #f1f5f9;
+            --text-muted:       #94a3b8;
+            --text-faint:       #64748b;
+            --text-footer:      #64748b;
+            --border-color:     rgba(255,255,255,0.1);
+            --border-nav:       #1e293b;
+            --border-tag:       #334155;
+            --badge-bg:         #1e293b;
+            --badge-border:     #334155;
+            --icon-ring:        rgba(255,255,255,0.08);
+        }
+
+        /* ── LIGHT THEME ── */
+        :root[data-theme="light"] {
+            --bg-main:          #f1f5f9;
+            --bg-nav:           rgba(255,255,255,0.97);
+            --bg-card:          rgba(255,255,255,0.92);
+            --bg-footer:        #e2e8f0;
+            --bg-tag:           #dde3ec;
+            --bg-veille-block:  rgba(255,255,255,0.9);
+            --bg-veille-inner:  rgba(226,232,240,0.8);
+            --bg-e6-card:       linear-gradient(135deg, #dbeafe, #e0f2fe);
+            --text-main:        #0f172a;
+            --text-muted:       #374151;
+            --text-faint:       #6b7280;
+            --text-footer:      #6b7280;
+            --border-color:     rgba(0,0,0,0.1);
+            --border-nav:       #e2e8f0;
+            --border-tag:       #b6c3d1;
+            --badge-bg:         #dde3ec;
+            --badge-border:     #b6c3d1;
+            --icon-ring:        rgba(0,0,0,0.07);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            scroll-behavior: smooth;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .mono { font-family: 'Fira Code', monospace; }
+
+        /* ── NAV & FOOTER ── */
+        nav    { background: var(--bg-nav);    border-bottom: 1px solid var(--border-nav) !important; }
+        footer { background: var(--bg-footer); border-top:    1px solid var(--border-nav) !important; }
+
+        /* ── THEME BUTTON ── */
+        .theme-btn {
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--text-muted);
+            border-radius: 9999px;
+            padding: 6px 14px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+        .theme-btn:hover { border-color: #10b981; color: #10b981; }
+
+        /* ── NAV LINKS ── */
+        .nav-link { transition: all 0.2s; position: relative; color: var(--text-muted); }
+        .nav-link:hover { color: #10b981; }
+
+        /* ── SECTION TITLE ── */
+        .section-title { position: relative; display: inline-block; }
+        .section-title::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 0;
+            width: 40px; height: 2px;
+            background: #10b981;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.12); }
+
+        /* ── DELETE BUTTON ── */
+        .proc-delete-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--bg-main);
+            color: var(--text-faint);
+            font-size: 14px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+        .card:hover .proc-delete-btn { opacity: 1; }
+        .proc-delete-btn:hover { background: #f43f5e; border-color: #f43f5e; color: #fff !important; transform: scale(1.15); }
+
+        /* ── VEILLE ── */
+        .veille-card {
+            background: var(--bg-veille-block);
+            border-left: 4px solid #3b82f6;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        .veille-inner {
+            background: var(--bg-veille-inner);
+            border: 1px solid var(--border-tag);
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .veille-tag {
+            font-size: 10px;
+            background: var(--bg-tag);
+            color: var(--text-muted);
+            border: 1px solid var(--border-tag);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* ── E6 CARD ── */
+        .e6-card {
+            background: var(--bg-e6-card);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ── XP CARDS (Parcours) ── */
+        .xp-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 28px 32px;
+            display: grid;
+            grid-template-columns: 64px 1fr;
+            gap: 24px;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .xp-card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(16,185,129,0.10); }
+
+        .xp-icon-wrap {
+            width: 56px; height: 56px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 0 6px var(--icon-ring);
+            flex-shrink: 0;
+        }
+        .xp-icon-wrap.grad-purple { background: linear-gradient(135deg, #7c3aed, #db2777); }
+        .xp-icon-wrap.grad-blue   { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+
+        .xp-badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            border-radius: 9999px;
+            padding: 3px 10px;
+            font-size: 10px;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+        /* dark accents */
+        :root[data-theme="dark"] .badge.accent { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.4); color: #34d399; }
+        :root[data-theme="dark"] .badge.blue   { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.4); color: #93c5fd; }
+        /* light accents — darker for contrast */
+        :root[data-theme="light"] .badge.accent { background: rgba(16,185,129,0.1); border-color: rgba(5,150,105,0.5); color: #047857; }
+        :root[data-theme="light"] .badge.blue   { background: rgba(37,99,235,0.08); border-color: rgba(37,99,235,0.4); color: #1d4ed8; }
+
+        .xp-tasks { list-style: none; padding: 0; margin: 0; }
+        .xp-tasks li {
+            display: flex; align-items: flex-start; gap: 10px;
+            font-size: 13px;
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.6;
+        }
+        .xp-tasks li:last-child { border-bottom: none; }
+        .xp-tasks li .check { flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+        .xp-tasks li strong { color: var(--text-main); font-weight: 600; }
+
+        /* ── ATTESTATION BTN ── */
+        .attestation-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139,92,246,0.4);
+            background: rgba(139,92,246,0.1);
+            color: #a78bfa;
+            white-space: nowrap;
+        }
+        .attestation-btn:hover {
+            background: rgba(139,92,246,0.25);
+            border-color: #8b5cf6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(139,92,246,0.2);
+        }
+        .attestation-btn.has-file {
+            border-color: rgba(16,185,129,0.4);
+            background: rgba(16,185,129,0.1);
+            color: #34d399;
+        }
+        .attestation-btn.has-file:hover {
+            background: rgba(16,185,129,0.25);
+            border-color: #10b981;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.2);
+        }
+        .attestation-upload-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--badge-border);
+            background: var(--badge-bg);
+            color: var(--text-muted);
+        }
+        .attestation-upload-btn:hover {
+            border-color: #8b5cf6;
+            color: #a78bfa;
+        }
+        :root[data-theme="light"] .attestation-btn {
+            color: #6d28d9;
+        }
+        :root[data-theme="light"] .attestation-btn.has-file {
+            color: #047857;
+        }
+
+        /* ── light-mode: fix hardcoded Tailwind slate colors ── */
+        :root[data-theme="light"] .text-slate-400 { color: var(--text-muted) !important; }
+        :root[data-theme="light"] .text-slate-500 { color: var(--text-faint) !important; }
+
+        @media (max-width: 640px) {
+            .xp-card { grid-template-columns: 1fr; }
+            .xp-icon-wrap { width: 48px; height: 48px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body class="leading-relaxed">
+
+    <nav class="sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <span class="mono text-emerald-400 font-bold tracking-tighter text-xl">IDRISS_YACOUBI_</span>
+            <div class="hidden md:flex space-x-8 text-xs uppercase tracking-widest font-medium items-center">
+                <a href="#profil"      class="nav-link">Profil</a>
+                <a href="#objectif"    class="nav-link">Objectif</a>
+                <a href="#parcours"    class="nav-link">Stages</a>
+                <a href="#competences" class="nav-link">Compétences</a>
+                <a href="#procedures"  class="nav-link">Procédures</a>
+                <a href="#veille"      class="nav-link">Veille</a>
+                <a href="#e6"          class="nav-link">Épreuve E6</a>
+                <button class="theme-btn" id="themeToggle" onclick="toggleTheme()">
+                    <span id="themeIcon">☀️</span>
+                    <span id="themeLabel">Clair</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 py-12 space-y-32">
+
+        <!-- ── 01. PROFIL ── -->
+        <section id="profil" class="pt-10 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 01. Profil</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-start mt-8">
+                <!-- Présentation -->
+                <div class="space-y-6">
+                    <h1 class="text-5xl font-bold leading-tight">Idriss <span class="text-emerald-400">Yacoubi</span></h1>
+                    <p class="text-lg" style="color:var(--text-muted)">
+                        Étudiant en 2ème année de <strong>BTS SIO</strong> option <strong class="text-blue-500">SISR</strong> à CaenSup Sainte-Ursule.
+                        Passionné par la cybersécurité et l'administration des systèmes Linux, j'ai piloté la migration de <strong>180+ postes</strong> chez Howmet SAS.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/50 text-emerald-500 text-xs rounded font-semibold">BTS SIO</span>
+                        <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/50 text-blue-500 text-xs rounded font-semibold">Option SISR</span>
+                        <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/50 text-purple-500 text-xs rounded font-semibold">Cybersécurité</span>
+                    </div>
+                    <!-- CV Button -->
+                    <div class="flex items-center gap-3 pt-1">
+                        <button id="cv-download-btn" onclick="openPdfViewer('./CV_Idriss_Yacoubi.pdf')"
+                           class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold mono transition-all duration-300 shadow-lg hover:shadow-emerald-500/25 hover:scale-105 cursor-pointer"
+                           style="background:linear-gradient(135deg,#10b981,#059669);color:#fff;">
+                            📄 VOIR MON CV
+                        </button>
+                        <!-- Bouton upload CV (admin seulement) -->
+                        <label id="cv-upload-label" class="hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold mono cursor-pointer transition-all duration-300 hover:scale-105"
+                               style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-muted);">
+                            ⬆️ MODIFIER
+                            <input type="file" id="cv-upload-input" accept="application/pdf" class="hidden" onchange="uploadCV(this)">
+                        </label>
+                    </div>
+                    <div class="flex gap-4 pt-2">
+                        <div class="card px-5 py-3 rounded-xl text-center" style="min-width:100px">
+                            <div class="text-2xl font-bold text-emerald-400">180+</div>
+                            <div class="text-[10px] mono" style="color:var(--text-faint)">Postes migrés</div>
+                        </div>
+                        <div class="card px-5 py-3 rounded-xl text-center" style="min-width:100px">
+                            <div class="text-2xl font-bold text-blue-400">15</div>
+                            <div class="text-[10px] mono" style="color:var(--text-faint)">Semaines de stage</div>
+                        </div>
+                        <div class="card px-5 py-3 rounded-xl text-center" style="min-width:100px">
+                            <div class="text-2xl font-bold text-purple-400">2</div>
+                            <div class="text-[10px] mono" style="color:var(--text-faint)">Années BTS</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parcours scolaire -->
+                <div class="card p-8 rounded-xl border-l-4 border-blue-500">
+                    <h3 class="mono text-blue-400 mb-6 font-bold">Parcours_Scolaire :</h3>
+                    <div class="space-y-6">
+                        <!-- Étape 1 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                                <div class="w-0.5 flex-1" style="background:var(--border-color)"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs mono font-semibold text-emerald-500">2024 – 2026</p>
+                                <p class="font-bold text-sm" style="color:var(--text-main)">BTS SIO option SISR</p>
+                                <p class="text-xs" style="color:var(--text-faint)">CaenSup Sainte-Ursule — Services Informatiques aux Organisations</p>
+                            </div>
+                        </div>
+                        <!-- Étape 2 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                <div class="w-0.5 flex-1" style="background:var(--border-color)"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs mono font-semibold text-blue-500">2023 – 2024</p>
+                                <p class="font-bold text-sm" style="color:var(--text-main)">Licence Éco-Gestion (L1)</p>
+                                <p class="text-xs" style="color:var(--text-faint)">1ère année de Licence Économie-Gestion à l'université</p>
+                            </div>
+                        </div>
+                        <!-- Étape 3 -->
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                            </div>
+                            <div>
+                                <p class="text-xs mono font-semibold text-purple-500">2023</p>
+                                <p class="font-bold text-sm" style="color:var(--text-main)">Baccalauréat</p>
+                                <p class="text-xs" style="color:var(--text-faint)">Obtention du baccalauréat</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 02. OBJECTIF ── -->
+        <section id="objectif" class="scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 02. Objectif</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center mt-8">
+                <div class="space-y-6">
+                    <h3 class="text-3xl font-bold leading-tight">Futur Analyste <span class="text-blue-500">SOC</span> &amp; Expert Linux.</h3>
+                    <p class="text-sm leading-relaxed" style="color:var(--text-muted)">
+                        Mon objectif est de devenir <strong style="color:var(--text-main)">analyste SOC</strong> spécialisé dans la détection d'intrusions et la réponse aux incidents sur les systèmes Linux.
+                        Après mon BTS, je poursuis en <strong style="color:var(--text-main)">Bachelor Cybersécurité</strong> pour approfondir mes compétences en analyse SIEM, forensique et hardening.
+                    </p>
+                </div>
+                <div class="card p-8 rounded-xl border-l-4 border-emerald-500">
+                    <h3 class="mono text-emerald-400 mb-4 font-bold">Plan_de_Carrière :</h3>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Bachelor Cybersécurité (2026)</li>
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Analyste SOC N1 / Réponse aux incidents</li>
+                        <li class="flex items-center gap-3" style="color:var(--text-main)"><span class="text-emerald-500">▹</span> Expertise Hardening &amp; Systèmes Industriels</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 03. STAGES ── -->
+        <section id="parcours" class="space-y-10 scroll-mt-24">
+            <div>
+                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 03. Stages</h2>
+                <p class="mt-4 text-sm" style="color:var(--text-faint)">Deux stages effectués chez <strong style="color:var(--text-muted)">Howmet SAS</strong> durant ma formation BTS SIO SISR.</p>
+            </div>
+
+            <!-- Bloc 1 -->
+            <div class="xp-card">
+                <div class="xp-icon-wrap grad-purple">🖥️</div>
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+                        <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Technicien Systèmes et Réseaux</h3>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-1a" class="attestation-btn" onclick="viewAttestation('1A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-1a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '1A')">
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-xs mb-3" style="color:var(--text-faint)">Assistant Informatique — 1ère année BTS SIO SISR</p>
+                    <div class="xp-badges">
+                        <span class="badge">📅 Mai 2025 – Juin 2025</span>
+                        <span class="badge accent">⏱ 5 semaines</span>
+                        <span class="badge blue">🔧 Support &amp; Déploiement</span>
+                    </div>
+                    <ul class="xp-tasks">
+                        <li><span class="check">✅</span><span><strong>Support utilisateur :</strong> Assistance technique de proximité, diagnostic et résolution des incidents matériels et logiciels du quotidien.</span></li>
+                        <li><span class="check">✅</span><span><strong>Déploiement de postes :</strong> Préparation, configuration et mise en service de nouveaux postes de travail (imaging, jonction domaine AD, GPO).</span></li>
+                        <li><span class="check">✅</span><span><strong>Script PowerShell :</strong> Développement d'un outil d'<em>énumération réseau</em> et de prise en main à distance RDP en 1 clic — gain de temps opérateur estimé à <strong>~70%</strong>.</span></li>
+                        <li><span class="check">✅</span><span><strong>Infrastructure physique :</strong> Installation de serveurs en baie rack, sécurisation de switches et organisation du câblage structuré.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bloc 2 -->
+            <div class="xp-card">
+                <div class="xp-icon-wrap grad-blue">🛠️</div>
+                <div>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+                        <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Administrateur SI – Gestion de Projet</h3>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-2a" class="attestation-btn" onclick="viewAttestation('2A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-2a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '2A')">
+                            </label>
+                        </div>
+                    </div>
+                    <p class="text-xs mb-3" style="color:var(--text-faint)">Technicien de Proximité / Projet — 2ème année BTS SIO SISR</p>
+                    <div class="xp-badges">
+                        <span class="badge">📅 Déc. 2025 – Fév. 2026</span>
+                        <span class="badge accent">⏱ 10 semaines</span>
+                        <span class="badge blue">🚀 Projet &amp; Infrastructure</span>
+                    </div>
+                    <ul class="xp-tasks">
+                        <li><span class="check">✅</span><span><strong>Pilotage de projet :</strong> Chef de projet technique pour la mise à niveau complète du parc — <strong>+180 clients légers Dell</strong> et périphériques remplacés en production.</span></li>
+                        <li><span class="check">✅</span><span><strong>Configuration réseau :</strong> Brassage des nouveaux équipements, gestion des VLANs Cisco et reconfiguration des baies selon plan de câblage.</span></li>
+                        <li><span class="check">✅</span><span><strong>Déploiement Wi-Fi :</strong> Installation et configuration de bornes Wi-Fi professionnelles en environnement industriel (couverture multi-zones, authentification réseau).</span></li>
+                        <li><span class="check">✅</span><span><strong>Management opérationnel :</strong> Animation de réunions hebdomadaires de suivi — reporting d'avancement, arbitrage des priorités et coordination des intervenants.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 04. COMPÉTENCES ── -->
+        <section id="competences" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 04. Compétences Techniques</h2>
+
+            <div class="grid md:grid-cols-2 gap-4 mt-6">
+
+                <!-- Gestion de switch -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">🔀</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Gestion de switch</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">6 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Configuration des VLANs (création, assignation de ports)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Trunk 802.1Q &amp; encapsulation inter-VLAN</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Spanning Tree Protocol (STP / RSTP)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Port Security &amp; filtrage MAC</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>EtherChannel / agrégation de liens</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Sauvegarde &amp; restauration de configuration IOS</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Gestion de routeur -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">🌐</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Gestion de routeur</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">5 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Routage statique &amp; routes par défaut</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Routage dynamique OSPF (single-area &amp; multi-area)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>NAT / PAT (translation d'adresses)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>ACL standard &amp; étendue (filtrage de trafic)</li>
+                            <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Configuration DHCP Relay &amp; inter-VLAN routing</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Administration et configuration système -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(139,92,246,0.15)">🖥️</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Administration et configuration système</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Windows Server : Active Directory / GPO / DHCP / DNS / DDNS / Unités Organisationnelles / Partages</li>
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Linux : DNS / DHCP / LDAP / HAProxy / Samba / FTP / PostFix / Squid</li>
+                            <li class="flex items-start gap-2"><span class="text-purple-500 mt-0.5">•</span>Virtualisation : VMware / Hyper-V / VirtualBox / Proxmox</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cybersécurité -->
+                <div class="card rounded-xl overflow-hidden">
+                    <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(16,185,129,0.15)">🛡️</div>
+                        <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Cybersécurité</span>
+                        <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                        <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                    </button>
+                    <div class="skill-content hidden px-5 pb-5 pt-0">
+                        <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Hardening ANSSI : durcissement SSH, pare-feu, gestion des droits</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Architecture sécurisée 3-Tiers (DMZ, segmentation réseau)</li>
+                            <li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span>Analyse de vulnérabilités &amp; veille CVE</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Compétences fondamentales (pleine largeur) -->
+            <div class="card rounded-xl overflow-hidden">
+                <button onclick="toggleSkill(this)" class="w-full flex items-center gap-4 p-5 text-left transition-all" style="cursor:pointer">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0" style="background:rgba(59,130,246,0.15)">⚙️</div>
+                    <span class="font-bold text-sm flex-1" style="color:var(--text-main)">Compétences fondamentales</span>
+                    <span class="text-[10px] mono px-3 py-1 rounded-full" style="background:var(--badge-bg);border:1px solid var(--badge-border);color:var(--text-faint)">3 items</span>
+                    <span class="skill-chevron text-xs transition-transform duration-200" style="color:var(--text-faint)">▼</span>
+                </button>
+                <div class="skill-content hidden px-5 pb-5 pt-0">
+                    <ul class="space-y-2 text-sm" style="color:var(--text-muted)">
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Scripts PowerShell : automatisation, énumération réseau, gestion Active Directory</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Support utilisateur : diagnostic, résolution d'incidents, prise en main à distance</li>
+                        <li class="flex items-start gap-2"><span class="text-blue-500 mt-0.5">•</span>Gestion de projet : planification, coordination, reporting hebdomadaire</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── 05. PROCÉDURES ── -->
+        <section id="procedures" class="space-y-8 scroll-mt-24">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 05. Procédures &amp; Travaux Pratiques</h2>
+                <p class="text-sm" style="color:var(--text-faint)">Les procédures sont automatiquement récupérées depuis GitHub.</p>
+            </div>
+
+            <!-- Zone Admin Upload -->
+            <div id="admin-upload-zone" class="hidden mb-6 p-6 rounded-xl border-2 border-dashed border-purple-500/30 bg-purple-500/5">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h3 class="font-bold text-sm text-purple-400 mb-1">Mode Administrateur Actif</h3>
+                        <p class="text-xs text-purple-400/70">Sélectionnez un fichier PDF pour l'ajouter directement sur le site.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="file" id="pdf-upload-input" accept="application/pdf" class="text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-purple-600 file:text-white hover:file:bg-purple-700 cursor-pointer transition-colors">
+                        <button onclick="uploadProcedure()" id="upload-btn" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors shadow-lg hidden">ENVOYER</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grille des procédures -->
+            <div id="proc-grid" class="grid md:grid-cols-2 gap-8">
+                <!-- Les procédures seront injectées ici -->
+                <div class="col-span-2 text-center text-sm py-10" style="color:var(--text-faint)">⏳ Chargement des procédures depuis GitHub...</div>
+            </div>
+
+            <!-- Message si vide -->
+            <div id="proc-empty" class="card p-10 rounded-xl text-center hidden">
+                <div class="text-4xl mb-3">📂</div>
+                <p class="text-sm" style="color:var(--text-faint)">Aucune procédure trouvée sur le répertoire GitHub.</p>
+            </div>
+        </section>
+
+        <!-- ── 05. VEILLE ── -->
+        <section id="veille" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 06. Veille Technologique</h2>
+            <p class="text-sm mt-2" style="color:var(--text-faint)">Cybersécurité des Systèmes Linux — Mes trois sources principales de veille.</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+
+                <!-- ANSSI -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#10b981">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(16,185,129,0.15)">🛡️</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">ANSSI</h3>
+                            <p class="text-[10px] mono text-emerald-500">cyber.gouv.fr</p>
+                        </div>
+                    </div>
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        L'agence nationale publie régulièrement des guides de durcissement et des alertes CERT-FR sur les menaces ciblant les systèmes Linux.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-emerald-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Guide de durcissement GNU/Linux (v2)</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Recommandations de configuration sécurisée : partitionnement, gestion des droits, désactivation des services inutiles, sécurisation SSH et pare-feu.</p>
+                        </div>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-emerald-500">Alerte CERT-FR</p>
+                            <p class="text-xs" style="color:var(--text-main)">CVE-2024-1086 — Élévation de privilèges noyau</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Faille dans le module nf_tables du noyau Linux permettant une élévation de privilèges locale. Correctif critique appliqué en urgence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Hacker News -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#3b82f6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(59,130,246,0.15)">📰</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">The Hacker News</h3>
+                            <p class="text-[10px] mono text-blue-500">thehackernews.com</p>
+                        </div>
+                    </div>
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        Source incontournable pour les actualités cybersécurité mondiales : analyses de malwares, vulnérabilités et campagnes d'attaques en cours.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-blue-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Ransomware Akira cible les serveurs Linux ESXi</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Le groupe Akira déploie un variant Linux de son ransomware ciblant spécifiquement les hyperviseurs VMware ESXi pour chiffrer les machines virtuelles.</p>
+                        </div>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-blue-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Perfctl : malware furtif infectant des milliers de serveurs Linux</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Un malware utilise des rootkits pour se dissimuler sur des serveurs Linux, exploitant des failles connues pour du minage de crypto et du proxyjacking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LinuxToday -->
+                <div class="card p-6 rounded-xl border-t-4" style="border-color:#8b5cf6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg" style="background:rgba(139,92,246,0.15)">🐧</div>
+                        <div>
+                            <h3 class="font-bold text-sm" style="color:var(--text-main)">LinuxToday</h3>
+                            <p class="text-[10px] mono text-purple-500">linuxtoday.com</p>
+                        </div>
+                    </div>
+                    <p class="text-xs leading-relaxed mb-4" style="color:var(--text-muted)">
+                        Agrégateur d'actualités sur l'écosystème Linux : mises à jour du noyau, nouvelles distributions, outils de sécurité et bonnes pratiques admin.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-purple-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Linux Kernel 6.8 : renforcement de la sécurité mémoire</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Le noyau 6.8 intègre de nouvelles protections mémoire et améliore le support de Rust dans le kernel pour réduire les vulnérabilités liées au C.</p>
+                        </div>
+                        <div class="veille-inner" style="padding:12px">
+                            <p class="text-[10px] mono mb-1 text-purple-500">Actualité</p>
+                            <p class="text-xs" style="color:var(--text-main)">Backdoor découverte dans xz-utils (CVE-2024-3094)</p>
+                            <p class="text-[11px] mt-1" style="color:var(--text-faint)">Une porte dérobée a été insérée dans la librairie de compression xz, menaçant les connexions SSH de nombreuses distributions Linux majeures.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ── 06. E6 ── -->
+        <section id="e6" class="space-y-8 scroll-mt-24">
+            <h2 class="text-emerald-400 mono text-sm tracking-widest uppercase section-title">// 07. Parcours de Professionnalisation (E6)</h2>
+
+            <!-- Projets en cours -->
+            <div class="space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/50 text-amber-500 text-xs rounded-full font-bold mono">⏳ EN COURS</span>
+                </div>
+
+                <!-- Projet collectif GSB -->
+                <div class="xp-card">
+                    <div class="xp-icon-wrap" style="background:linear-gradient(135deg,#f59e0b,#d97706)">🏗️</div>
+                    <div>
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
+                            <h3 class="text-lg font-bold" style="color:var(--text-main)">Projet Collectif — Contexte GSB</h3>
+                            <span class="mono text-xs font-semibold text-amber-500">Projet E6</span>
+                        </div>
+                        <p class="text-xs mb-3" style="color:var(--text-faint)">Segmentation réseau, services et besoins métier</p>
+                        <div class="xp-badges">
+                            <span class="badge">👥 Projet collectif</span>
+                            <span class="badge accent">🔧 Infrastructure</span>
+                            <span class="badge blue">🐧 Linux</span>
+                        </div>
+                        <p class="text-sm mt-4 leading-relaxed" style="color:var(--text-muted)">
+                            Projet collectif basé sur le contexte GSB (segmentation réseau, services et besoins métier). De mon côté, je suis principalement en charge du service <strong style="color:var(--text-main)">DNS secondaire</strong> et <strong style="color:var(--text-main)">d'une solution de firewalling</strong>.
+                        </p>
+
+                        <!-- Sous-projets en cours -->
+                        <div class="mt-5 space-y-3">
+                            <p class="text-[10px] mono font-semibold text-amber-500 uppercase tracking-wider">Projets en cours :</p>
+                            <ul class="xp-tasks">
+                                <li><span class="check">🔄</span><span><strong>Mise en place d'un DNS Secondaire sous Linux</strong></span></li>
+                                <li><span class="check">🔄</span><span><strong>Mise en place d'une solution de firewalling et d'une DMZ</strong></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau de synthèse (dynamique depuis GitHub) -->
+            <div id="e6-content"></div>
+        </section>
+
+    </main>
+
+    <footer class="py-12 mt-24">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-[10px] mono tracking-widest" style="color:var(--text-footer)">
+            <p>IDRISS YACOUBI © 2026 | BTS SIO SISR <span style="cursor:pointer;margin-left:10px;opacity:0.5;transition:opacity 0.2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5" onclick="openAdminModal()" title="Admin Login">🔒</span></p>
+            <p>CONSTRUIT AVEC PASSION POUR LE JURY</p>
+        </div>
+    </footer>
+
+    <!-- Admin Modal -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-[var(--bg-main)] border border-[var(--border-color)] p-8 rounded-xl max-w-md w-full mx-4 shadow-2xl relative">
+            <h3 class="text-xl font-bold mb-2" style="color:var(--text-main)">Connexion Admin</h3>
+            <p class="text-xs mb-6" style="color:var(--text-muted)">Entrez votre Personal Access Token GitHub (avec les droits 'repo') pour activer l'upload.</p>
+            <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx" 
+                   class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg px-4 py-3 text-sm mb-4 outline-none focus:border-purple-500 transition-colors" style="color:var(--text-main)">
+            <div id="admin-error" class="hidden text-rose-500 text-xs mb-4">Token invalide ou erreur réseau.</div>
+            <div class="flex justify-end gap-3">
+                <button onclick="logoutAdmin()" id="logout-btn" class="hidden px-4 py-2 text-xs font-bold rounded-lg text-rose-500 hover:bg-rose-500/10 transition-colors mr-auto">DÉCONNEXION</button>
+                <button onclick="closeAdminModal()" class="px-4 py-2 text-xs font-bold rounded-lg hover:bg-white/5 transition-colors" style="color:var(--text-muted)">FERMER</button>
+                <button onclick="saveAdminToken()" class="px-4 py-2 text-xs font-bold rounded-lg bg-purple-600 hover:bg-purple-700 text-white transition-colors">SAUVEGARDER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Modal -->
+    <div id="pdf-modal" class="hidden fixed inset-0 bg-black/90 z-[60] flex flex-col items-center justify-center backdrop-blur-sm">
+        <div class="w-full max-w-6xl flex justify-end p-4">
+            <button onclick="closePdfViewer()" class="px-4 py-2 text-xs font-bold rounded-lg hover:bg-white/10 transition-colors text-white">FERMER ✕</button>
+        </div>
+        <div class="w-full max-w-5xl h-[85vh] bg-white rounded-xl overflow-hidden mx-4 shadow-2xl border border-white/10 relative">
+            <div id="pdf-loader" class="absolute inset-0 flex items-center justify-center bg-gray-900 text-white text-sm mono">Chargement du PDF...</div>
+            <iframe id="pdf-viewer-iframe" class="w-full h-full border-0 relative z-10 bg-white" src="" onload="document.getElementById('pdf-loader').style.display='none'"></iframe>
+        </div>
+    </div>
+
+    <script>
+        /* ── THEME ── */
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeIcon').textContent = isDark ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = isDark ? 'Sombre' : 'Clair';
+        }
+
+        /* ── SKILLS ACCORDION ── */
+        function toggleSkill(btn) {
+            const content = btn.nextElementSibling;
+            const chevron = btn.querySelector('.skill-chevron');
+            const isOpen = !content.classList.contains('hidden');
+            if (isOpen) {
+                content.classList.add('hidden');
+                chevron.style.transform = 'rotate(0deg)';
+                btn.closest('.card').style.borderColor = 'var(--border-color)';
+            } else {
+                content.classList.remove('hidden');
+                chevron.style.transform = 'rotate(180deg)';
+                btn.closest('.card').style.borderColor = '#8b5cf6';
+            }
+        }
+
+        /* ── COULEURS ── */
+        const COLORS = {
+            emerald: { border:'#10b981', btn:'background:#10b981;color:#fff', hover:'hover:border-emerald-500', label:'#10b981' },
+            blue:    { border:'#3b82f6', btn:'background:#3b82f6;color:#fff', hover:'hover:border-blue-500',    label:'#3b82f6' },
+            purple:  { border:'#8b5cf6', btn:'background:#8b5cf6;color:#fff', hover:'hover:border-purple-500',  label:'#8b5cf6' },
+            rose:    { border:'#f43f5e', btn:'background:#f43f5e;color:#fff', hover:'hover:border-rose-500',    label:'#f43f5e' },
+        };
+        let selectedColor = 'emerald';
+        let selectedFileB64 = null;
+        let selectedFileName = '';
+
+        function selectColor(el, color) {
+            document.querySelectorAll('.color-swatch').forEach(s => s.style.borderColor = 'transparent');
+            el.style.borderColor = '#f1f5f9';
+            selectedColor = color;
+        }
+        // init first swatch selected
+        window.addEventListener('DOMContentLoaded', () => {
+            const first = document.querySelector('.color-swatch');
+            if (first) first.style.borderColor = '#f1f5f9';
+            renderAll();
+            renderE6();
+        });
+
+        /* ── FETCH & RENDER ── */
+        async function fetchGitHubFiles() {
+            try {
+                const token = localStorage.getItem('gh_admin_token');
+                const headers = {};
+                if (token) headers['Authorization'] = `Bearer ${token}`;
+
+                // Utilisation de l'API GitHub pour lister les fichiers du dossier principal (avec cache-busting)
+                const response = await fetch(`https://api.github.com/repos/idrissyacoubi-sio/idrissyacoubi-sio.github.io/contents/?t=${new Date().getTime()}`, {
+                    headers: headers
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+                const data = await response.json();
+                
+                // Filtrer les fichiers PDF
+                const pdfFiles = data.filter(file => file.name.endsWith('.pdf'));
+                
+                // Séparer le tableau de synthèse et le CV des autres procédures
+                const e6File = pdfFiles.find(f => f.name.toLowerCase().includes('synthese') || f.name.toLowerCase().includes('tableau'));
+                const procedures = pdfFiles.filter(f => f !== e6File && !f.name.toLowerCase().startsWith('cv'));
+                
+                renderAll(procedures);
+                renderE6(e6File);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des fichiers :", error);
+                document.getElementById('proc-grid').innerHTML = '<div class="col-span-2 text-center text-sm py-10" style="color:#f87171">Impossible de charger les procédures. Vérifiez votre connexion.</div>';
+            }
+        }
+
+        function renderAll(procedures) {
+            const grid  = document.getElementById('proc-grid');
+            const empty = document.getElementById('proc-empty');
+
+            if (!procedures || procedures.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            grid.innerHTML = procedures.map((p, i) => {
+                const colors = ['emerald', 'blue', 'purple', 'rose'];
+                const colorKey = colors[i % colors.length];
+                const c = COLORS[colorKey] || COLORS.emerald;
+                
+                const title = p.name.replace('.pdf', '').replace(/_/g, ' ');
+                const btnStyle = c.btn;
+                const borderStyle = `border-left:4px solid ${c.border}`;
+
+                const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+                const deleteBtn = isAdmin ? `<button onclick="deleteProcedure('${p.name}', '${p.sha}')" class="px-3 py-2 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 rounded-lg text-xs font-bold transition-colors ml-3" title="Supprimer">🗑️</button>` : '';
+
+                const pdfUrl = './' + encodeURIComponent(p.name);
+
+                return `
+                <div class="card p-8 rounded-xl" style="${borderStyle}">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold" style="color:var(--text-main)">${title}</h3>
+                    </div>
+                    <p class="text-sm mb-6" style="color:var(--text-muted)">Document PDF disponible en consultation ou téléchargement.</p>
+                    <div class="flex items-center gap-2">
+                        <button onclick="openPdfViewer('${pdfUrl}')"
+                           class="inline-block font-bold py-2 px-5 rounded-lg text-xs mono transition-all hover:opacity-90" style="${btnStyle}">
+                            VISUALISER
+                        </button>
+                        ${deleteBtn}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        /* ══════════════════════════════════════
+           E6 — TABLEAU DE SYNTHÈSE (FETCH GITHUB)
+           ══════════════════════════════════════ */
+        function renderE6(e6File) {
+            const container = document.getElementById('e6-content');
+
+            if (e6File) {
+                container.innerHTML = `
+                <div class="e6-card p-8 rounded-xl" style="position:relative">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold" style="color:var(--text-main)">Tableau de Synthèse des Compétences</h3>
+                            <p class="text-sm mt-1" style="color:var(--text-muted)">Récapitulatif officiel des activités réalisées en entreprise et en formation.</p>
+                            <p class="text-xs mono mt-2" style="color:var(--text-faint)">📄 ${e6File.name}</p>
+                        </div>
+                        <div class="flex gap-3 flex-shrink-0">
+                            <button onclick="openPdfViewer('./${encodeURIComponent(e6File.name)}')"
+                               class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all text-xs mono whitespace-nowrap">
+                                VISUALISER
+                            </button>
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                container.innerHTML = `
+                <div class="e6-card p-8 rounded-xl">
+                    <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                        <div>
+                            <h3 class="text-xl font-bold" style="color:var(--text-main)">Tableau de Synthèse des Compétences</h3>
+                            <p class="text-sm mt-1" style="color:var(--text-muted)">Récapitulatif officiel des activités réalisées en entreprise et en formation.</p>
+                        </div>
+                        <span class="text-xs mono px-4 py-2 rounded-full font-bold" style="background:var(--bg-main);border:1px solid var(--border-color);color:var(--text-faint)">
+                            NON PUBLIÉ
+                        </span>
+                    </div>
+                </div>`;
+            }
+        }
+
+        /* ══════════════════════════════════════
+           ADMIN, UPLOAD & DELETE (GITHUB API)
+           ══════════════════════════════════════ */
+        const repoOwner = 'idrissyacoubi-sio';
+        const repoName = 'idrissyacoubi-sio.github.io';
+
+        function checkAdminStatus() {
+            const token = localStorage.getItem('gh_admin_token');
+            const uploadZone = document.getElementById('admin-upload-zone');
+            const cvUploadLabel = document.getElementById('cv-upload-label');
+            if (token) {
+                uploadZone.classList.remove('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                if (cvUploadLabel) cvUploadLabel.classList.remove('hidden');
+            } else {
+                uploadZone.classList.add('hidden');
+                document.getElementById('logout-btn').classList.add('hidden');
+                if (cvUploadLabel) cvUploadLabel.classList.add('hidden');
+            }
+            updateAttestationAdminUI();
+        }
+
+        function openAdminModal() {
+            const token = localStorage.getItem('gh_admin_token');
+            if (token) document.getElementById('github-token-input').value = token;
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-error').classList.add('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        /* ══════════════════════════════════════
+           PDF VIEWER MODAL
+           ══════════════════════════════════════ */
+        function openPdfViewer(url) {
+            const modal = document.getElementById('pdf-modal');
+            const iframe = document.getElementById('pdf-viewer-iframe');
+            const loader = document.getElementById('pdf-loader');
+            
+            loader.style.display = 'flex';
+            // Disable scroll on body
+            document.body.style.overflow = 'hidden';
+            
+            iframe.src = url;
+            modal.classList.remove('hidden');
+        }
+
+        function closePdfViewer() {
+            const modal = document.getElementById('pdf-modal');
+            const iframe = document.getElementById('pdf-viewer-iframe');
+            
+            // Re-enable scroll
+            document.body.style.overflow = '';
+            
+            modal.classList.add('hidden');
+            setTimeout(() => { iframe.src = ''; }, 300); // Clear iframe after animation
+        }
+
+        async function saveAdminToken() {
+            const token = document.getElementById('github-token-input').value.trim();
+            if (!token) return;
+            
+            try {
+                const res = await fetch(`https://api.github.com/user`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    localStorage.setItem('gh_admin_token', token);
+                    closeAdminModal();
+                    checkAdminStatus();
+                    fetchGitHubFiles(); // Refresh to show delete buttons
+                } else {
+                    document.getElementById('admin-error').classList.remove('hidden');
+                }
+            } catch (e) {
+                document.getElementById('admin-error').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('gh_admin_token');
+            document.getElementById('github-token-input').value = '';
+            closeAdminModal();
+            checkAdminStatus();
+            fetchGitHubFiles();
+        }
+
+        document.getElementById('pdf-upload-input')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const btn = document.getElementById('upload-btn');
+            if (file && file.type === 'application/pdf') {
+                btn.classList.remove('hidden');
+            } else {
+                btn.classList.add('hidden');
+            }
+        });
+
+        function getBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        async function uploadProcedure() {
+            const fileInput = document.getElementById('pdf-upload-input');
+            const file = fileInput.files[0];
+            const token = localStorage.getItem('gh_admin_token');
+            const btn = document.getElementById('upload-btn');
+            
+            if (!file || !token) return;
+            
+            btn.textContent = 'ENVOI...';
+            btn.disabled = true;
+
+            try {
+                const base64 = await getBase64(file);
+                const encodedPath = encodeURIComponent(file.name);
+                
+                // Vérifier si le fichier existe déjà pour récupérer son SHA (nécessaire pour l'écraser)
+                let existingSha = null;
+                try {
+                    const checkRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (checkRes.ok) {
+                        const checkData = await checkRes.json();
+                        existingSha = checkData.sha;
+                    }
+                } catch (e) {
+                    // Ignorer, le fichier n'existe probablement pas encore
+                }
+                
+                const bodyPayload = {
+                    message: `Ajout/Mise à jour de la procédure: ${file.name}`,
+                    content: base64
+                };
+                if (existingSha) {
+                    bodyPayload.sha = existingSha;
+                }
+
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (response.ok) {
+                    fileInput.value = '';
+                    btn.classList.add('hidden');
+                    btn.textContent = 'ENVOYER';
+                    btn.disabled = false;
+                    fetchGitHubFiles(); // Refresh list
+                } else {
+                    const err = await response.json();
+                    let errorMsg = err.message || 'Erreur inconnue';
+                    if (response.status === 404) {
+                        errorMsg = "Non trouvé (404). Vérifiez que votre Token GitHub possède bien les droits 'repo' (Classic) ou 'Contents: Read and write' (Fine-grained).";
+                    }
+                    alert("Erreur lors de l'envoi : " + errorMsg);
+                    btn.textContent = 'ENVOYER';
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erreur réseau");
+                btn.textContent = 'ENVOYER';
+                btn.disabled = false;
+            }
+        }
+
+        async function deleteProcedure(fileName, sha) {
+            if (!confirm(`Voulez-vous vraiment supprimer la procédure "${fileName}" ?`)) return;
+            
+            const token = localStorage.getItem('gh_admin_token');
+            if (!token) return;
+
+            try {
+                const encodedPath = encodeURIComponent(fileName);
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `Suppression de la procédure: ${fileName}`,
+                        sha: sha
+                    })
+                });
+
+                if (response.ok) {
+                    fetchGitHubFiles(); // Refresh list
+                } else {
+                    const err = await response.json();
+                    let errorMsg = err.message || 'Erreur inconnue';
+                    if (response.status === 404) {
+                        errorMsg = "Non trouvé (404). Vérifiez que votre Token a les droits 'repo'.";
+                    }
+                    alert("Erreur lors de la suppression: " + errorMsg);
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erreur réseau");
+            }
+        }
+
+        /* ══════════════════════════════════════
+           CV UPLOAD (GITHUB API)
+           ══════════════════════════════════════ */
+        async function uploadCV(inputEl) {
+            const file = inputEl.files[0];
+            const token = localStorage.getItem('gh_admin_token');
+            if (!file || !token) return;
+
+            const cvBtn = document.getElementById('cv-download-btn');
+            const originalText = cvBtn.textContent;
+            cvBtn.textContent = '⏳ ENVOI EN COURS...';
+            cvBtn.style.pointerEvents = 'none';
+
+            try {
+                const base64 = await getBase64(file);
+                const targetName = 'CV_Idriss_Yacoubi.pdf';
+                const encodedPath = encodeURIComponent(targetName);
+
+                // Vérifier si le fichier existe déjà
+                let existingSha = null;
+                try {
+                    const checkRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (checkRes.ok) {
+                        const checkData = await checkRes.json();
+                        existingSha = checkData.sha;
+                    }
+                } catch (e) { /* fichier n'existe pas encore */ }
+
+                const bodyPayload = {
+                    message: `Mise à jour du CV`,
+                    content: base64
+                };
+                if (existingSha) bodyPayload.sha = existingSha;
+
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (response.ok) {
+                    cvBtn.textContent = '✅ CV MIS À JOUR !';
+                    cvBtn.style.pointerEvents = '';
+                    setTimeout(() => { cvBtn.textContent = '📄 VOIR MON CV'; }, 2500);
+                    inputEl.value = '';
+                } else {
+                    const err = await response.json();
+                    alert("Erreur lors de l'envoi du CV : " + (err.message || 'Erreur inconnue'));
+                    cvBtn.textContent = originalText;
+                    cvBtn.style.pointerEvents = '';
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erreur réseau lors de l'envoi du CV");
+                cvBtn.textContent = originalText;
+                cvBtn.style.pointerEvents = '';
+            }
+        }
+
+        /* ══════════════════════════════════════
+           ATTESTATION DE STAGE
+           ══════════════════════════════════════ */
+        const attestationFiles = { '1A': null, '2A': null };
+
+        async function checkAttestations() {
+            const token = localStorage.getItem('gh_admin_token');
+            const headers = {};
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            for (const year of ['1A', '2A']) {
+                const fileName = `Attestation_Stage_${year}.pdf`;
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodeURIComponent(fileName)}?t=${Date.now()}`, { headers });
+                    if (res.ok) {
+                        const data = await res.json();
+                        attestationFiles[year] = data;
+                        const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+                        if (btn) {
+                            btn.classList.add('has-file');
+                            btn.innerHTML = '📜 Attestation';
+                        }
+                    } else {
+                        attestationFiles[year] = null;
+                        const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+                        if (btn) {
+                            btn.classList.remove('has-file');
+                            btn.innerHTML = '📜 Attestation';
+                        }
+                    }
+                } catch (e) {
+                    attestationFiles[year] = null;
+                }
+            }
+
+            // Show upload buttons if admin
+            updateAttestationAdminUI();
+        }
+
+        function updateAttestationAdminUI() {
+            const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+            for (const year of ['1A', '2A']) {
+                const uploadLabel = document.getElementById(`attestation-upload-${year.toLowerCase()}`);
+                if (uploadLabel) {
+                    uploadLabel.style.display = isAdmin ? 'inline-flex' : 'none';
+                }
+            }
+        }
+
+        function viewAttestation(year) {
+            if (attestationFiles[year]) {
+                openPdfViewer('./' + encodeURIComponent(`Attestation_Stage_${year}.pdf`));
+            } else {
+                const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+                if (isAdmin) {
+                    alert(`Aucune attestation de stage ${year === '1A' ? '1ère année' : '2ème année'} trouvée.\nUtilisez le bouton ⬆️ pour en ajouter une.`);
+                } else {
+                    alert(`L'attestation de stage ${year === '1A' ? '1ère année' : '2ème année'} n'est pas encore disponible.`);
+                }
+            }
+        }
+
+        async function uploadAttestation(inputEl, year) {
+            const file = inputEl.files[0];
+            const token = localStorage.getItem('gh_admin_token');
+            if (!file || !token) return;
+
+            const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '⏳ ENVOI...';
+            btn.style.pointerEvents = 'none';
+
+            try {
+                const base64 = await getBase64(file);
+                const targetName = `Attestation_Stage_${year}.pdf`;
+                const encodedPath = encodeURIComponent(targetName);
+
+                let existingSha = null;
+                try {
+                    const checkRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (checkRes.ok) {
+                        const checkData = await checkRes.json();
+                        existingSha = checkData.sha;
+                    }
+                } catch (e) { /* fichier n'existe pas encore */ }
+
+                const bodyPayload = {
+                    message: `Ajout/Mise à jour attestation de stage ${year}`,
+                    content: base64
+                };
+                if (existingSha) bodyPayload.sha = existingSha;
+
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (response.ok) {
+                    btn.innerHTML = '✅ AJOUTÉ !';
+                    btn.style.pointerEvents = '';
+                    setTimeout(() => {
+                        btn.innerHTML = '📜 Attestation';
+                        checkAttestations();
+                    }, 2000);
+                    inputEl.value = '';
+                } else {
+                    const err = await response.json();
+                    alert("Erreur : " + (err.message || 'Erreur inconnue'));
+                    btn.innerHTML = originalHTML;
+                    btn.style.pointerEvents = '';
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erreur réseau");
+                btn.innerHTML = originalHTML;
+                btn.style.pointerEvents = '';
+            }
+        }
+
+        // Lancer la récupération au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAdminStatus();
+            fetchGitHubFiles();
+            checkAttestations();
+        });
+    </script>
+</body>
+</html>

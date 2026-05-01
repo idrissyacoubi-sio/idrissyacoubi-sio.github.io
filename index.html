@@ -280,6 +280,26 @@
             border-color: #8b5cf6;
             color: #a78bfa;
         }
+        .attestation-delete-btn {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(244,63,94,0.3);
+            background: rgba(244,63,94,0.08);
+            color: #fb7185;
+        }
+        .attestation-delete-btn:hover {
+            background: #f43f5e;
+            border-color: #f43f5e;
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(244,63,94,0.3);
+        }
         :root[data-theme="light"] .attestation-btn {
             color: #6d28d9;
         }
@@ -454,6 +474,7 @@
                                 ⬆️
                                 <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '1A')">
                             </label>
+                            <button id="attestation-delete-1a" class="attestation-delete-btn" onclick="deleteAttestation('1A')" title="Supprimer l'attestation">🗑️</button>
                         </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Assistant Informatique — 1ère année BTS SIO SISR</p>
@@ -486,6 +507,7 @@
                                 ⬆️
                                 <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '2A')">
                             </label>
+                            <button id="attestation-delete-2a" class="attestation-delete-btn" onclick="deleteAttestation('2A')" title="Supprimer l'attestation">🗑️</button>
                         </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Technicien de Proximité / Projet — 2ème année BTS SIO SISR</p>
@@ -1286,8 +1308,12 @@
             const isAdmin = localStorage.getItem('gh_admin_token') !== null;
             for (const year of ['1A', '2A']) {
                 const uploadLabel = document.getElementById(`attestation-upload-${year.toLowerCase()}`);
+                const deleteBtn = document.getElementById(`attestation-delete-${year.toLowerCase()}`);
                 if (uploadLabel) {
                     uploadLabel.style.display = isAdmin ? 'inline-flex' : 'none';
+                }
+                if (deleteBtn) {
+                    deleteBtn.style.display = (isAdmin && attestationFiles[year]) ? 'inline-flex' : 'none';
                 }
             }
         }
@@ -1365,6 +1391,42 @@
                 alert("Erreur réseau");
                 btn.innerHTML = originalHTML;
                 btn.style.pointerEvents = '';
+            }
+        }
+
+        async function deleteAttestation(year) {
+            if (!confirm(`Voulez-vous vraiment supprimer l'attestation de stage ${year === '1A' ? '1ère année' : '2ème année'} ?`)) return;
+
+            const token = localStorage.getItem('gh_admin_token');
+            if (!token || !attestationFiles[year]) return;
+
+            const sha = attestationFiles[year].sha;
+            const fileName = `Attestation_Stage_${year}.pdf`;
+            const encodedPath = encodeURIComponent(fileName);
+
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: `Suppression attestation de stage ${year}`,
+                        sha: sha
+                    })
+                });
+
+                if (response.ok) {
+                    attestationFiles[year] = null;
+                    checkAttestations();
+                } else {
+                    const err = await response.json();
+                    alert('Erreur : ' + (err.message || 'Erreur inconnue'));
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Erreur réseau');
             }
         }
 
