@@ -228,6 +228,65 @@
         .xp-tasks li .check { flex-shrink: 0; margin-top: 1px; font-size: 14px; }
         .xp-tasks li strong { color: var(--text-main); font-weight: 600; }
 
+        /* ── ATTESTATION BTN ── */
+        .attestation-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139,92,246,0.4);
+            background: rgba(139,92,246,0.1);
+            color: #a78bfa;
+            white-space: nowrap;
+        }
+        .attestation-btn:hover {
+            background: rgba(139,92,246,0.25);
+            border-color: #8b5cf6;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(139,92,246,0.2);
+        }
+        .attestation-btn.has-file {
+            border-color: rgba(16,185,129,0.4);
+            background: rgba(16,185,129,0.1);
+            color: #34d399;
+        }
+        .attestation-btn.has-file:hover {
+            background: rgba(16,185,129,0.25);
+            border-color: #10b981;
+            box-shadow: 0 4px 16px rgba(16,185,129,0.2);
+        }
+        .attestation-upload-btn {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid var(--badge-border);
+            background: var(--badge-bg);
+            color: var(--text-muted);
+        }
+        .attestation-upload-btn:hover {
+            border-color: #8b5cf6;
+            color: #a78bfa;
+        }
+        :root[data-theme="light"] .attestation-btn {
+            color: #6d28d9;
+        }
+        :root[data-theme="light"] .attestation-btn.has-file {
+            color: #047857;
+        }
+
         /* ── light-mode: fix hardcoded Tailwind slate colors ── */
         :root[data-theme="light"] .text-slate-400 { color: var(--text-muted) !important; }
         :root[data-theme="light"] .text-slate-500 { color: var(--text-faint) !important; }
@@ -386,7 +445,16 @@
                 <div>
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
                         <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Technicien Systèmes et Réseaux</h3>
-                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-1a" class="attestation-btn" onclick="viewAttestation('1A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-1a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '1A')">
+                            </label>
+                        </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Assistant Informatique — 1ère année BTS SIO SISR</p>
                     <div class="xp-badges">
@@ -409,7 +477,16 @@
                 <div>
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
                         <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Administrateur SI – Gestion de Projet</h3>
-                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-2a" class="attestation-btn" onclick="viewAttestation('2A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-2a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '2A')">
+                            </label>
+                        </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Technicien de Proximité / Projet — 2ème année BTS SIO SISR</p>
                     <div class="xp-badges">
@@ -907,6 +984,7 @@
                 document.getElementById('logout-btn').classList.add('hidden');
                 if (cvUploadLabel) cvUploadLabel.classList.add('hidden');
             }
+            updateAttestationAdminUI();
         }
 
         function openAdminModal() {
@@ -1165,10 +1243,136 @@
             }
         }
 
+        /* ══════════════════════════════════════
+           ATTESTATION DE STAGE
+           ══════════════════════════════════════ */
+        const attestationFiles = { '1A': null, '2A': null };
+
+        async function checkAttestations() {
+            const token = localStorage.getItem('gh_admin_token');
+            const headers = {};
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            for (const year of ['1A', '2A']) {
+                const fileName = `Attestation_Stage_${year}.pdf`;
+                try {
+                    const res = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodeURIComponent(fileName)}?t=${Date.now()}`, { headers });
+                    if (res.ok) {
+                        const data = await res.json();
+                        attestationFiles[year] = data;
+                        const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+                        if (btn) {
+                            btn.classList.add('has-file');
+                            btn.innerHTML = '📜 Attestation';
+                        }
+                    } else {
+                        attestationFiles[year] = null;
+                        const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+                        if (btn) {
+                            btn.classList.remove('has-file');
+                            btn.innerHTML = '📜 Attestation';
+                        }
+                    }
+                } catch (e) {
+                    attestationFiles[year] = null;
+                }
+            }
+
+            // Show upload buttons if admin
+            updateAttestationAdminUI();
+        }
+
+        function updateAttestationAdminUI() {
+            const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+            for (const year of ['1A', '2A']) {
+                const uploadLabel = document.getElementById(`attestation-upload-${year.toLowerCase()}`);
+                if (uploadLabel) {
+                    uploadLabel.style.display = isAdmin ? 'inline-flex' : 'none';
+                }
+            }
+        }
+
+        function viewAttestation(year) {
+            if (attestationFiles[year]) {
+                openPdfViewer('./' + encodeURIComponent(`Attestation_Stage_${year}.pdf`));
+            } else {
+                const isAdmin = localStorage.getItem('gh_admin_token') !== null;
+                if (isAdmin) {
+                    alert(`Aucune attestation de stage ${year === '1A' ? '1ère année' : '2ème année'} trouvée.\nUtilisez le bouton ⬆️ pour en ajouter une.`);
+                } else {
+                    alert(`L'attestation de stage ${year === '1A' ? '1ère année' : '2ème année'} n'est pas encore disponible.`);
+                }
+            }
+        }
+
+        async function uploadAttestation(inputEl, year) {
+            const file = inputEl.files[0];
+            const token = localStorage.getItem('gh_admin_token');
+            if (!file || !token) return;
+
+            const btn = document.getElementById(`attestation-btn-${year.toLowerCase()}`);
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '⏳ ENVOI...';
+            btn.style.pointerEvents = 'none';
+
+            try {
+                const base64 = await getBase64(file);
+                const targetName = `Attestation_Stage_${year}.pdf`;
+                const encodedPath = encodeURIComponent(targetName);
+
+                let existingSha = null;
+                try {
+                    const checkRes = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (checkRes.ok) {
+                        const checkData = await checkRes.json();
+                        existingSha = checkData.sha;
+                    }
+                } catch (e) { /* fichier n'existe pas encore */ }
+
+                const bodyPayload = {
+                    message: `Ajout/Mise à jour attestation de stage ${year}`,
+                    content: base64
+                };
+                if (existingSha) bodyPayload.sha = existingSha;
+
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${encodedPath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(bodyPayload)
+                });
+
+                if (response.ok) {
+                    btn.innerHTML = '✅ AJOUTÉ !';
+                    btn.style.pointerEvents = '';
+                    setTimeout(() => {
+                        btn.innerHTML = '📜 Attestation';
+                        checkAttestations();
+                    }, 2000);
+                    inputEl.value = '';
+                } else {
+                    const err = await response.json();
+                    alert("Erreur : " + (err.message || 'Erreur inconnue'));
+                    btn.innerHTML = originalHTML;
+                    btn.style.pointerEvents = '';
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Erreur réseau");
+                btn.innerHTML = originalHTML;
+                btn.style.pointerEvents = '';
+            }
+        }
+
         // Lancer la récupération au chargement
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminStatus();
             fetchGitHubFiles();
+            checkAttestations();
         });
     </script>
 </body>
