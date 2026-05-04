@@ -826,23 +826,28 @@
         };
 
         /* ══════════════════════════════════════
-           ✅ FIX PRINCIPAL : lecture via manifest.json
-           Au lieu d'appeler l'API GitHub (rate-limitée à 60 req/h pour les anonymes),
-           on lit un simple fichier JSON statique hébergé dans le repo.
-           Aucune limite de taux, aucune authentification requise.
+           FETCH DEPUIS L'API GITHUB
            ══════════════════════════════════════ */
         async function fetchGitHubFiles() {
             try {
-                const res = await fetch(`./manifest.json?t=${Date.now()}`);
-                if (!res.ok) throw new Error(`manifest.json introuvable (${res.status})`);
-                const manifest = await res.json();
+                const token = localStorage.getItem('gh_admin_token');
+                const headers = {};
+                if (token) headers['Authorization'] = `Bearer ${token}`;
 
-                renderAll(manifest.procedures || []);
-                renderE6(manifest.e6 || null);
-                renderSynthese(manifest.e6 || null);
+                const response = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/?t=${Date.now()}`, { headers });
+                if (!response.ok) throw new Error('API GitHub inaccessible');
+                const data = await response.json();
+
+                const pdfFiles = data.filter(file => file.name.endsWith('.pdf'));
+                const e6File   = pdfFiles.find(f => f.name.toLowerCase().includes('synthese') || f.name.toLowerCase().includes('tableau'));
+                const procedures = pdfFiles.filter(f => f !== e6File && !f.name.toLowerCase().startsWith('cv'));
+
+                renderAll(procedures);
+                renderE6(e6File || null);
+                renderSynthese(e6File || null);
             } catch (error) {
-                console.error('Erreur chargement manifest:', error);
-                // Fallback : affiche une section vide propre, sans message d'erreur alarmant
+                console.error('Erreur chargement GitHub:', error);
+                // Fallback silencieux — pas de message rouge alarmant
                 renderAll([]);
                 renderE6(null);
                 renderSynthese(null);
