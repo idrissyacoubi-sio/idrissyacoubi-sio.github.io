@@ -458,7 +458,17 @@
                 <div>
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
                         <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Technicien Systèmes et Réseaux</h3>
-                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-1a" class="attestation-btn" onclick="viewAttestation('1A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-1a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '1A')">
+                            </label>
+                            <button id="attestation-delete-1a" class="attestation-delete-btn" onclick="deleteAttestation('1A')" title="Supprimer l'attestation">🗑️</button>
+                        </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Assistant Informatique — 1ère année BTS SIO SISR</p>
                     <div class="xp-badges">
@@ -480,7 +490,17 @@
                 <div>
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
                         <h3 class="text-lg font-bold" style="color:var(--text-main)">Stage Administrateur SI – Gestion de Projet</h3>
-                        <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                        <div class="flex items-center gap-2">
+                            <span class="mono text-xs font-semibold text-emerald-500">Howmet SAS</span>
+                            <button id="attestation-btn-2a" class="attestation-btn" onclick="viewAttestation('2A')" title="Voir l'attestation de stage">
+                                📜 Attestation
+                            </button>
+                            <label id="attestation-upload-2a" class="attestation-upload-btn">
+                                ⬆️
+                                <input type="file" accept="application/pdf" class="hidden" onchange="uploadAttestation(this, '2A')">
+                            </label>
+                            <button id="attestation-delete-2a" class="attestation-delete-btn" onclick="deleteAttestation('2A')" title="Supprimer l'attestation">🗑️</button>
+                        </div>
                     </div>
                     <p class="text-xs mb-3" style="color:var(--text-faint)">Technicien de Proximité / Projet — 2ème année BTS SIO SISR</p>
                     <div class="xp-badges">
